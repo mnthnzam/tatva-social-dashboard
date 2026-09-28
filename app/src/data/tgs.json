@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-28 12:03",
+ "generatedAt": "2026-09-28 13:28",
  "dataCutoff": "2026-09-27",
  "brand": {
   "id": "tgs",
@@ -2549,21 +2549,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-02#0",
@@ -2599,21 +2585,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-03#0",
@@ -2649,21 +2621,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-05#0",
@@ -2694,21 +2652,7 @@
    "needsFootage": true,
    "footageDue": "2026-10-02",
    "dueText": null,
-   "need": "Shoot the script: a younger student, a butterfly drawing, \"the wings always come later\".",
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Script",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "cut",
-     "label": "Final cut",
-     "available": false,
-     "waiting": "Footage from Tatva due 2 Oct"
-    }
-   ]
+   "need": "Shoot the script: a younger student, a butterfly drawing, \"the wings always come later\"."
   },
   {
    "id": "2026-10-06#0",
@@ -2739,21 +2683,7 @@
    "needsFootage": true,
    "footageDue": "2026-10-03",
    "dueText": null,
-   "need": "Director's message video for The Director's Desk.",
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Script",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "cut",
-     "label": "Final cut",
-     "available": false,
-     "waiting": "Footage from Tatva due 3 Oct"
-    }
-   ]
+   "need": "Director's message video for The Director's Desk."
   },
   {
    "id": "2026-10-08#0",
@@ -2789,21 +2719,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-10#0",
@@ -2834,21 +2750,7 @@
    "needsFootage": true,
    "footageDue": "2026-10-07",
    "dueText": null,
-   "need": "Shoot the script: Ananya's quiet corner, a story about friendship.",
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Script",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "cut",
-     "label": "Final cut",
-     "available": false,
-     "waiting": "Footage from Tatva due 7 Oct"
-    }
-   ]
+   "need": "Shoot the script: Ananya's quiet corner, a story about friendship."
   },
   {
    "id": "2026-10-13#0",
@@ -2884,21 +2786,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-16#0",
@@ -2934,21 +2822,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-17#0",
@@ -2984,21 +2858,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-19#0",
@@ -3034,21 +2894,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-20#0",
@@ -3084,21 +2930,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-22#0",
@@ -3129,21 +2961,7 @@
    "needsFootage": true,
    "footageDue": null,
    "dueText": "Day after the celebration",
-   "need": "Dussehra celebration footage, within a day of the event.",
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Script",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "cut",
-     "label": "Final cut",
-     "available": false,
-     "waiting": "Day after the celebration"
-    }
-   ]
+   "need": "Dussehra celebration footage, within a day of the event."
   },
   {
    "id": "2026-10-24#0",
@@ -3174,21 +2992,7 @@
    "needsFootage": true,
    "footageDue": "2026-10-21",
    "dueText": null,
-   "need": "Tatvotsav footage for the second reel.",
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Script",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "cut",
-     "label": "Final cut",
-     "available": false,
-     "waiting": "Footage from Tatva due 21 Oct"
-    }
-   ]
+   "need": "Tatvotsav footage for the second reel."
   },
   {
    "id": "2026-10-28#0",
@@ -3224,21 +3028,7 @@
    "needsFootage": false,
    "footageDue": null,
    "dueText": null,
-   "need": null,
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Idea & copy",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "design",
-     "label": "Design",
-     "available": true,
-     "waiting": null
-    }
-   ]
+   "need": null
   },
   {
    "id": "2026-10-30#0",
@@ -3269,21 +3059,7 @@
    "needsFootage": true,
    "footageDue": "2026-10-27",
    "dueText": null,
-   "need": "Alumni interview video for The Alumni Echo.",
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Script",
-     "available": true,
-     "waiting": null
-    },
-    {
-     "key": "cut",
-     "label": "Final cut",
-     "available": false,
-     "waiting": "Footage from Tatva due 27 Oct"
-    }
-   ]
+   "need": "Alumni interview video for The Alumni Echo."
   },
   {
    "id": "undated#0",
@@ -3314,21 +3090,7 @@
    "needsFootage": true,
    "footageDue": null,
    "dueText": null,
-   "need": "A reel from the Tatva team. Date and topic to be fixed.",
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Script",
-     "available": false,
-     "waiting": "Topic still to be fixed"
-    },
-    {
-     "key": "cut",
-     "label": "Final cut",
-     "available": false,
-     "waiting": "Waiting for footage from Tatva"
-    }
-   ]
+   "need": "A reel from the Tatva team. Date and topic to be fixed."
   },
   {
    "id": "undated#1",
@@ -3359,21 +3121,7 @@
    "needsFootage": true,
    "footageDue": null,
    "dueText": null,
-   "need": "A reel from the Tatva team. Date and topic to be fixed.",
-   "stages": [
-    {
-     "key": "idea",
-     "label": "Script",
-     "available": false,
-     "waiting": "Topic still to be fixed"
-    },
-    {
-     "key": "cut",
-     "label": "Final cut",
-     "available": false,
-     "waiting": "Waiting for footage from Tatva"
-    }
-   ]
+   "need": "A reel from the Tatva team. Date and topic to be fixed."
   }
  ],
  "content": [

@@ -397,21 +397,6 @@ for month in REPORT_MONTHS:
             'needsFootage': False, 'footageDue': None, 'dueText': None, 'need': None,
         })
 
-def review_stages(fmt, o, has_design):
-    """Two approval gates per post: the idea (or script) first, then the finished design (or cut)."""
-    has_idea = bool(o.get('concept') or o.get('copy'))
-    reel = fmt == 'Reel'
-    due = o.get('footageDue')
-    return [
-        {'key': 'idea', 'label': 'Script' if reel else 'Idea & copy', 'available': has_idea,
-         'waiting': None if has_idea else 'Topic still to be fixed'},
-        {'key': 'cut' if reel else 'design', 'label': 'Final cut' if reel else 'Design', 'available': (not reel) and has_design,
-         'waiting': None if ((not reel) and has_design) else (
-             (f"Footage from Tatva due {dt.date.fromisoformat(due).strftime('%-d %b')}" if due else o.get('dueText') or 'Waiting for footage from Tatva')
-             if reel else 'Design in progress')},
-    ]
-
-
 # October: already-cleaned plan items + snapshot boost flags
 oct_snap = snapshot(10)
 oct_rows = {str(r['date']): r for r in details(10)}
@@ -437,7 +422,6 @@ for o in json.load(open(os.path.join(RAW, 'oct_items.json'))):
         'creative': plan_creative(os.path.basename(img)) if img else None,
         'needsFootage': bool(o.get('needsFootage')), 'footageDue': o.get('footageDue'),
         'dueText': o.get('dueText'), 'need': o.get('need') if o.get('needsFootage') else None,
-        'stages': review_stages(fmt, o, bool(img)),
     })
 
 # --------------------------------------------------------------------------- markers, titles, baselines

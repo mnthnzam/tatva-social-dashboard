@@ -8,51 +8,19 @@ const LABEL: Record<string, string> = {
   views: 'Views', reach: 'Accounts reached', viewers: 'Viewers', interactions: 'Interactions', follows: 'New follows',
   unfollows: 'Unfollows', visits: 'Page visits', conversations: 'Messages started',
 }
-const A = () => DATA.account
 
-export const prevOf = (x: { value: number; change: number }) => (x.change > -1 ? x.value / (1 + x.change) : 0)
-
-export function Change({ change, invert }: { change: number; invert?: boolean }) {
+function Change({ change, invert }: { change: number; invert?: boolean }) {
   const dir = Math.abs(change) < 0.02 ? 'flat' : (change > 0) !== !!invert ? 'up' : 'down'
   return <em className={dir}>{change > 0.02 ? '↑' : change < -0.02 ? '↓' : '→'} {pct(Math.abs(change))}</em>
 }
 
-/** Totals across both platforms, with the change worked back from Meta's per-platform % changes. */
-export function combined(metric: string) {
-  const ps = Object.values(A().platforms).map((p) => p.metrics[metric]).filter(Boolean)
-  const value = ps.reduce((a, x) => a + x.value, 0)
-  const prev = ps.reduce((a, x) => a + prevOf(x), 0)
-  return { value, change: prev ? (value - prev) / prev : 0 }
-}
-
-export function AccountStrip({ onGo }: { onGo: () => void }) {
-  const { instagram: ig, facebook: fb } = A().platforms
-  const net = (p: typeof ig) => (p.metrics.follows?.value ?? 0) - (p.metrics.unfollows?.value ?? 0)
-  const views = combined('views')
-  const inter = combined('interactions')
-  return (
-    <div className="strip">
-      <button onClick={onGo}><small>Instagram followers</small><b>{ig.followersLabel}</b><em className={net(ig) >= 0 ? 'up' : 'down'}>{net(ig) >= 0 ? '+' : ''}{net(ig)} in 28 days</em></button>
-      <button onClick={onGo}><small>Facebook followers</small><b>{fb.followersLabel}</b><em className={net(fb) >= 0 ? 'up' : 'down'}>{net(fb) >= 0 ? '+' : ''}{net(fb)} in 28 days</em></button>
-      <button onClick={onGo}><small>Views · 28 days</small><b>{n(views.value)}</b><Change change={views.change} /></button>
-      <button onClick={onGo}><small>Interactions · 28 days</small><b>{n(inter.value)}</b><Change change={inter.change} /></button>
-    </div>
-  )
-}
-
-export function AccountView({ open, client }: { open: (s: Selection) => void; client?: boolean }) {
-  const acc = A()
+/** Instagram + Facebook account cards and the by-day chart. Used on the client home and the team Accounts view. */
+export function AccountView({ open }: { open: (s: Selection) => void }) {
+  const acc = DATA.account
   const [metric, setMetric] = useState<'views' | 'interactions' | 'follows'>('views')
   const plats = ['instagram', 'facebook'] as const
   return (
     <>
-      {client && (
-        <header className="p-head">
-          <span className="eyebrow">Instagram & Facebook · {acc.period.label}</span>
-          <h1 className="p-title">Your accounts at a glance</h1>
-          <p className="p-sub">The last 28 days compared with the 28 days before. Click any number to see it by day and against the previous period.</p>
-        </header>
-      )}
       <div className="acct-grid">
         {plats.map((k) => {
           const p = acc.platforms[k]

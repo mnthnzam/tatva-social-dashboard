@@ -34,7 +34,6 @@ export interface Content {
 
 export type VerdictKey = 'standout' | 'steady' | 'quiet' | 'boosted'
 export interface Plain { reached: number; reactions: number; passedOn: number; follows: number }
-export interface Stage { key: string; label: string; available: boolean; waiting: string | null }
 
 export interface PlanItem {
   id: string; month: string; date: string | null; title: string; bucket: string; format: Format
@@ -45,7 +44,6 @@ export interface PlanItem {
   status: PlanStatus; lag: number | null; contentId: string | null; replacedBy: string | null
   confidence: 'confirmed' | 'likely' | null; note: string | null; creative: Img | null
   needsFootage: boolean; footageDue: string | null; dueText: string | null; need: string | null
-  stages?: Stage[]
 }
 
 export interface Insight { kind: string; tone: 'good' | 'warn' | 'neutral'; title: string; body: string; refs: string[] }

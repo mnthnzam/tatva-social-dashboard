@@ -3,7 +3,6 @@ import type { Selection } from '../components/Drawer'
 import type { Route } from '../App'
 import { DATA, monthPlan } from '../lib/data'
 import { day, parseDate, plural } from '../lib/format'
-import { monthReviewSummary, useReviews } from '../lib/review'
 import { StatTile } from '../components/Charts'
 import { Icon } from '../components/Icon'
 import { PlanCard } from './common'
@@ -12,12 +11,11 @@ type P = { month: Month; open: (s: Selection) => void; go: (r: Partial<Route>) =
 
 export function PlanOverview({ month, open, go }: P) {
   const pl = monthPlan(month.id)
-  const { reviews } = useReviews()
-  const rs = monthReviewSummary(pl, reviews)
   const s = month.kind === 'plan' ? month.summary : null
   const t = new Date()
   const t0 = new Date(t.getFullYear(), t.getMonth(), t.getDate())
   const footage = pl.filter((p) => p.needsFootage).sort((a, b) => (a.footageDue ?? a.date ?? '9').localeCompare(b.footageDue ?? b.date ?? '9'))
+  const nextDue = footage.find((p) => p.footageDue && parseDate(p.footageDue) >= t0)
   const prevPlan = DATA.plan.filter((p) => p.month < month.id && (p.status === 'Not posted' || p.status === 'Upcoming'))
   const norm = (x: string) => x.replace(/\s*\(\d\)/, '').toLowerCase()
   const carried = pl.filter((p) => prevPlan.some((q) => norm(q.title) === norm(p.title)))
@@ -28,7 +26,7 @@ export function PlanOverview({ month, open, go }: P) {
       <div className="tiles">
         <StatTile label="Designs ready" value={`${s.designReady}/${s.formats.Static + (s.formats.Carousel ?? 0)}`} note="static posts with a final design" />
         <StatTile label="Needs footage" value={String(s.needsFootage)} note="reels depending on Tatva" />
-        <StatTile label="Client review" value={`${rs.approved + rs.partial}/${pl.length}`} note={`${rs.waiting} waiting · ${rs.changes} changes asked`} />
+        <StatTile label="Next footage due" value={nextDue ? day(nextDue.footageDue) : '—'} note={nextDue ? nextDue.title : 'nothing dated ahead'} />
         <StatTile label="Boost planned" value={String(s.boostPlanned)} note={`${s.linkedin} going to LinkedIn too`} />
       </div>
       <div className="two">

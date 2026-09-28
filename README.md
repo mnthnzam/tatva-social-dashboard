@@ -1,7 +1,7 @@
-# Tatva Social Dashboard (internal preview)
+# Tatva Social Dashboard
 
 Monthly social reporting and planning for Tatva Global School, built by Zamstars.
-Personal/local version — not deployed, no repo yet.
+Live at https://tatva-dashboard.vercel.app/ (deploys from `main`).
 
 ## Open it
 
@@ -17,20 +17,18 @@ npm run dev        # http://localhost:5173
 
 ## Two modes
 
-**Client view (default, `#/`)** — what Tatva sees, two visits a month:
-- **Home** — the two things that need them this month.
-- **Review October** — every planned post with its design (or script for reels). Two gates per post: idea & copy / script first, then design / final cut. Approve or ask for changes with a comment; "Send feedback" gives a summary to paste into WhatsApp or email.
-- **Results** — four plain numbers vs last month (people reached, reactions & comments, shares & saves, new followers), what worked, what was quieter, plan delivery, and every post with a one-line verdict.
+**Client view (default, `#/`)** — what Tatva sees. View-only: plan approvals and change requests happen on the call or WhatsApp.
+- **Home** — next month's plan and last month's results as two cards, then the accounts at a glance: Instagram and Facebook followers, net new followers, views, reach, interactions and messages over the last 28 days vs the 28 before, with a by-day chart. Account snapshot from Meta Business Suite (`pipeline/raw/account.json`).
+- **October plan** (`#/plan`) — every planned post week by week with its design (or script for reels), where it stands (design ready / script ready · footage due / topic to be fixed), and the footage Tatva needs to send by when.
+- **Results** (`#/results/<month>`) — four plain numbers vs last month (people reached, reactions & comments, shares & saves, new followers), what worked, what was quieter, plan delivery, and every post with a one-line verdict.
 
-- **Accounts** — bird's-eye view of Instagram and Facebook: followers, net new followers, views, reach, interactions, messages over the last 28 days vs the 28 before, with a by-day chart. Snapshot pulled from Meta Business Suite (`pipeline/raw/account.json`).
+Old links `#/review` and `#/account` still work (they open the plan and home).
 
 **Click to compare** — every headline number opens a breakdown: month by month, vs any other month (total, per post, by format, planned vs outside plan) and the posts that drove it. Every post can be compared with the typical post of its format, the month's average, or any other post.
 
-**Team view (`#/team/…`)** — Zamstars' working view: overview, posts, plan vs live calendar, boosts, trends, collabs, data & review queue. Post detail keeps the full Meta numbers behind tabs.
+**Team view (`#/team/…`)** — Zamstars' working view: overview, accounts, posts, plan vs live calendar, boosts, trends, collabs, data & review queue. Post detail keeps the full Meta numbers behind tabs.
 
 Light / dark / match-system toggle in both. Every screen has its own URL.
-
-**Review decisions are saved in this browser only** (preview build). The hosted version stores them in the database so Zamstars sees them live.
 
 ## Verdicts (client language)
 
@@ -75,6 +73,6 @@ npm run build     # → app/dist/index.html (single file) + dist/creatives
 - Reel previews are the opening frame of the video (Meta doesn't expose the chosen cover for IG reels here). The Admissions FAQ reel opens on a blank frame, so it shows no preview.
 - Stories only appear in Meta's export from mid-August.
 
-## Later (after approval)
+## Later
 
-Private GitHub repo → Vercel (Pro for client use) → Supabase for data + images + client logins → client review and comments.
+Client logins (the site is currently open to anyone with the link) and a scheduled monthly data refresh.
