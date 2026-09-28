@@ -6,10 +6,12 @@ import { dayLong, full, n, secs, time } from '../lib/format'
 import { Creative } from './Creative'
 import { BoostChip, MarkerChip, StatusChip, VerdictChip } from './Badges'
 import { Split } from './Charts'
-import { BigNumbers } from './PostNumbers'
+import { BigNumbers, shown } from './PostNumbers'
+import { MetricSheet } from './MetricSheet'
+import { CompareRows } from './Charts'
 import { Icon } from './Icon'
 
-export type Selection = { kind: 'c' | 'p'; id: string } | null
+export type Selection = { kind: 'c' | 'p' | 'm'; id: string } | null
 export type Mode = 'client' | 'team'
 
 export function Drawer({ sel, onClose, onOpen, mode }: { sel: Selection; onClose: () => void; onOpen: (s: Selection) => void; mode: Mode }) {
@@ -19,6 +21,16 @@ export function Drawer({ sel, onClose, onOpen, mode }: { sel: Selection; onClose
     return () => window.removeEventListener('keydown', k)
   }, [onClose])
   if (!sel) return null
+  if (sel.kind === 'm') {
+    return (
+      <div className="sheet-wrap" onClick={onClose}>
+        <aside className="sheet" style={{ width: 'min(820px, 100vw)' }} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+          <button className="sheet-close" onClick={onClose} aria-label="Close"><Icon name="close" /></button>
+          <MetricSheet id={sel.id} onOpen={onOpen} />
+        </aside>
+      </div>
+    )
+  }
   const c = sel.kind === 'c' ? contentById.get(sel.id) : undefined
   const p = sel.kind === 'p' ? planById.get(sel.id) : c?.planId ? planById.get(c.planId) : undefined
   const live = c ?? (p?.contentId ? contentById.get(p.contentId) : undefined)
@@ -57,6 +69,7 @@ function ContentSheet({ c, p, mode, onOpen }: { c: Content; p?: PlanItem; mode: 
 
         <div className="verdict-box"><p>{c.why}</p></div>
         <BigNumbers c={c} />
+        {c.marker !== 'collab' && <PostCompare c={c} mode={mode} />}
 
 
         {mode === 'client' ? (
@@ -173,5 +186,43 @@ function PlanSheet({ p, mode, onOpen }: { p: PlanItem; mode: Mode; onOpen: (s: S
         )}
       </div>
     </div>
+  )
+}
+
+/** Compare this post with the typical post of its format, the month's average, or any other post. */
+function PostCompare({ c, mode }: { c: Content; mode: Mode }) {
+  const [with_, setWith] = useState('month')
+  const own = DATA.content.filter((x) => x.marker !== 'collab' && x.id !== c.id)
+  const sameMonth = own.filter((x) => x.month === c.month && !x.boosted)
+  const avg = (k: 'reached' | 'reactions' | 'passedOn' | 'follows') => (sameMonth.length ? sameMonth.reduce((a, x) => a + x.plain[k], 0) / sameMonth.length : 0)
+  const typ = DATA.typical[c.format]
+  const other = own.find((x) => x.id === with_)
+  const a = shown(c)
+  const b = with_ === 'typical' ? { reached: typ?.reached ?? 0, reactions: typ?.reactions ?? 0, passedOn: typ?.passedOn ?? 0, follows: typ?.follows ?? 0 }
+    : with_ === 'month' ? { reached: avg('reached'), reactions: avg('reactions'), passedOn: avg('passedOn'), follows: avg('follows') }
+    : other ? shown(other) : null
+  const bLabel = with_ === 'typical' ? `Typical ${c.format.toLowerCase()}` : with_ === 'month' ? 'Average post this month' : other?.title ?? ''
+  const rows = b ? [
+    { key: 'r', label: 'People reached', a: a.reached, b: b.reached },
+    { key: 'e', label: 'Reactions & comments', a: a.reactions, b: b.reactions },
+    { key: 'p', label: 'Shares & saves', a: a.passedOn, b: b.passedOn },
+    { key: 'f', label: 'New followers', a: a.follows, b: b.follows },
+    ...(mode === 'team' && other ? [{ key: 'v', label: 'Organic views', a: c.metrics.views_org, b: other.metrics.views_org }] : []),
+  ] : []
+  const byMonth = [...own].sort((x, y) => y.date.localeCompare(x.date))
+  return (
+    <section className="vstack" style={{ gap: 10 }}>
+      <div className="s-head" style={{ marginBottom: 0 }}>
+        <h3 className="s-title" style={{ fontSize: 16 }}>Compare</h3>
+        <select className="sel" value={with_} onChange={(e) => setWith(e.target.value)} aria-label="Compare with">
+          <option value="typical">Typical {c.format.toLowerCase()} (Jul–Sep)</option>
+          <option value="month">Average post this month</option>
+          <optgroup label="Another post">
+            {byMonth.map((x) => <option key={x.id} value={x.id}>{x.date.slice(8, 10)}/{x.date.slice(5, 7)} · {x.title.slice(0, 48)}</option>)}
+          </optgroup>
+        </select>
+      </div>
+      {b && <CompareRows aLabel="This post" bLabel={bLabel} rows={rows} />}
+    </section>
   )
 }

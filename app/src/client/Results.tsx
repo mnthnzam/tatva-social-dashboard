@@ -71,13 +71,13 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
       </header>
 
       <div className="tiles">
-        <StatTile label="People reached" value={n(s.plain.reached)} cur={s.plain.reached} prev={prev?.summary.plain.reached} prevLabel={prev?.label} spark={spark('reached')}
+        <StatTile label="People reached" value={n(s.plain.reached)} cur={s.plain.reached} prev={prev?.summary.plain.reached} prevLabel={prev?.label} spark={spark('reached')} onClick={() => open({ kind: 'm', id: `reached|${month.id}` })}
           info="Added up across posts, organic only: someone who saw two posts counts twice."
           note={s.boostReach > 0 ? `+${n(s.boostReach)} more through boosts` : undefined} />
-        <StatTile label="Reactions & comments" value={n(s.plain.reactions)} cur={s.plain.reactions} prev={prev?.summary.plain.reactions} prevLabel={prev?.label} spark={spark('reactions')} />
-        <StatTile label="Shares & saves" value={n(s.plain.passedOn)} cur={s.plain.passedOn} prev={prev?.summary.plain.passedOn} prevLabel={prev?.label} spark={spark('passedOn')}
+        <StatTile label="Reactions & comments" value={n(s.plain.reactions)} cur={s.plain.reactions} prev={prev?.summary.plain.reactions} prevLabel={prev?.label} spark={spark('reactions')} onClick={() => open({ kind: 'm', id: `reactions|${month.id}` })} />
+        <StatTile label="Shares & saves" value={n(s.plain.passedOn)} cur={s.plain.passedOn} prev={prev?.summary.plain.passedOn} prevLabel={prev?.label} spark={spark('passedOn')} onClick={() => open({ kind: 'm', id: `passedOn|${month.id}` })}
           info="Parents sending a post on or keeping it — the strongest sign it mattered." />
-        <StatTile label="New followers" value={n(s.plain.follows)} cur={s.plain.follows} prev={prev?.summary.plain.follows} prevLabel={prev?.label} spark={spark('follows')} />
+        <StatTile label="New followers" value={n(s.plain.follows)} cur={s.plain.follows} prev={prev?.summary.plain.follows} prevLabel={prev?.label} spark={spark('follows')} onClick={() => open({ kind: 'm', id: `follows|${month.id}` })} />
       </div>
 
       {best.length > 0 && (

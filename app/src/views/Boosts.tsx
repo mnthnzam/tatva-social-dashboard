@@ -20,6 +20,7 @@ export function Boosts({ open }: { open: (s: Selection) => void }) {
     <div className="vstack" style={{ gap: 28 }}>
       <p className="lede">{boosted.length} of {own.length} own posts had paid support between July and September. The comparison that matters is what each boost added against a typical organic post — month-to-month paid totals mostly reflect how much was spent.</p>
 
+      <p className="callout warn">Missing from these numbers: an Instagram ad promoting “Same lesson, two ways in” ran 24–30 Sep (now paused). Meta’s per-post data doesn’t credit it to the post; it shows up as the jump in Instagram reach on the Accounts page.</p>
       <div className="tiles">
         <StatTile label={`Boosted posts · ${last.label}`} value={String(last.summary.boosted)} cur={last.summary.boosted} prev={prev.summary.boosted} prevLabel={prev.label} spark={spark((m) => m.summary.boosted)} />
         <StatTile label={`Reach through ads · ${last.label}`} value={n(last.summary.boostReach)} cur={last.summary.boostReach} prev={prev.summary.boostReach} prevLabel={prev.label} spark={spark((m) => m.summary.boostReach)} />

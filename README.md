@@ -22,6 +22,10 @@ npm run dev        # http://localhost:5173
 - **Review October** — every planned post with its design (or script for reels). Two gates per post: idea & copy / script first, then design / final cut. Approve or ask for changes with a comment; "Send feedback" gives a summary to paste into WhatsApp or email.
 - **Results** — four plain numbers vs last month (people reached, reactions & comments, shares & saves, new followers), what worked, what was quieter, plan delivery, and every post with a one-line verdict.
 
+- **Accounts** — bird's-eye view of Instagram and Facebook: followers, net new followers, views, reach, interactions, messages over the last 28 days vs the 28 before, with a by-day chart. Snapshot pulled from Meta Business Suite (`pipeline/raw/account.json`).
+
+**Click to compare** — every headline number opens a breakdown: month by month, vs any other month (total, per post, by format, planned vs outside plan) and the posts that drove it. Every post can be compared with the typical post of its format, the month's average, or any other post.
+
 **Team view (`#/team/…`)** — Zamstars' working view: overview, posts, plan vs live calendar, boosts, trends, collabs, data & review queue. Post detail keeps the full Meta numbers behind tabs.
 
 Light / dark / match-system toggle in both. Every screen has its own URL.

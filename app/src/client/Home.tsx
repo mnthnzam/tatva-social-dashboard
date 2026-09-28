@@ -5,6 +5,7 @@ import { monthReviewSummary, useReviews } from '../lib/review'
 import { Creative } from '../components/Creative'
 import { Icon } from '../components/Icon'
 import type { CRoute } from '../App'
+import { AccountStrip } from '../views/AccountView'
 
 export function Home({ plan, report, go }: { plan: PlanMonth; report: ReportMonth; go: (r: CRoute) => void }) {
   const { reviews } = useReviews()
@@ -20,6 +21,7 @@ export function Home({ plan, report, go }: { plan: PlanMonth; report: ReportMont
         <h1 className="p-title">Two things this month</h1>
         <p className="p-sub">Review what’s going out in {plan.label}, and see how {report.label} went.</p>
       </header>
+      <AccountStrip onGo={() => go({ page: 'account' })} />
       <div className="home-grid">
         <button className="home-card primary" onClick={() => go({ page: 'review', month: plan.id })}>
           <span className="hc-step">Start of month</span>

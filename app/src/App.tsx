@@ -17,13 +17,15 @@ import { Boosts } from './views/Boosts'
 import { Trends } from './views/Trends'
 import { Collabs } from './views/Collabs'
 import { DataView } from './views/DataView'
+import { AccountView } from './views/AccountView'
 
-export type View = 'overview' | 'posts' | 'plan' | 'boosts' | 'trends' | 'collabs' | 'data'
+export type View = 'overview' | 'account' | 'posts' | 'plan' | 'boosts' | 'trends' | 'collabs' | 'data'
 export interface Route { month: string; view: View; sel: Selection }
-export type CRoute = { page: 'home' | 'review' | 'results'; month?: string }
+export type CRoute = { page: 'home' | 'account' | 'review' | 'results'; month?: string }
 
 const VIEWS: { id: View; label: string; icon: string; scope: 'month' | 'all' }[] = [
   { id: 'overview', label: 'Overview', icon: 'overview', scope: 'month' },
+  { id: 'account', label: 'Accounts', icon: 'home', scope: 'all' },
   { id: 'posts', label: 'Posts', icon: 'posts', scope: 'month' },
   { id: 'plan', label: 'Plan vs live', icon: 'plan', scope: 'month' },
   { id: 'boosts', label: 'Boosts', icon: 'boost', scope: 'all' },
@@ -39,7 +41,7 @@ type Parsed = { mode: 'client'; c: CRoute; sel: Selection } | { mode: 'team'; t:
 
 function parseSel(q: string | undefined): Selection {
   const open = new URLSearchParams(q || '').get('open')
-  return open && /^[cp]:/.test(open) ? { kind: open[0] as 'c' | 'p', id: open.slice(2) } : null
+  return open && /^[cpm]:/.test(open) ? { kind: open[0] as 'c' | 'p' | 'm', id: open.slice(2) } : null
 }
 
 function parse(hash: string): Parsed {
@@ -51,6 +53,7 @@ function parse(hash: string): Parsed {
     const view = (VIEWS.some((v) => v.id === parts[2]) ? parts[2] : 'overview') as View
     return { mode: 'team', t: { month, view, sel } }
   }
+  if (parts[0] === 'account') return { mode: 'client', c: { page: 'account' }, sel }
   if (parts[0] === 'review') return { mode: 'client', c: { page: 'review', month: PLAN_MONTH.id }, sel }
   if (parts[0] === 'results') {
     const month = reportMonths.some((m) => m.id === parts[1]) ? parts[1] : LATEST_REPORT.id
@@ -60,7 +63,7 @@ function parse(hash: string): Parsed {
 }
 
 const cHash = (c: CRoute, sel: Selection = null) =>
-  `#/${c.page === 'home' ? '' : c.page === 'review' ? 'review' : `results/${c.month}`}${sel ? `?open=${sel.kind}:${encodeURIComponent(sel.id)}` : ''}`
+  `#/${c.page === 'home' ? '' : c.page === 'account' ? 'account' : c.page === 'review' ? 'review' : `results/${c.month}`}${sel ? `?open=${sel.kind}:${encodeURIComponent(sel.id)}` : ''}`
 const tHash = (r: Route) => `#/team/${r.month}/${r.view}${r.sel ? `?open=${r.sel.kind}:${encodeURIComponent(r.sel.id)}` : ''}`
 
 function ThemeToggle({ theme, set }: { theme: Theme; set: (t: Theme) => void }) {
@@ -107,6 +110,7 @@ function ClientApp({ c, sel, nav, theme, setTheme }: { c: CRoute; sel: Selection
           <button className="c-brand" onClick={() => go({ page: 'home' })}><span className="mark">T</span><span className="nm">Tatva Global School</span></button>
           <nav className="c-nav">
             <button className={c.page === 'home' ? 'on' : ''} onClick={() => go({ page: 'home' })}>Home</button>
+            <button className={c.page === 'account' ? 'on' : ''} onClick={() => go({ page: 'account' })}>Accounts</button>
             <button className={c.page === 'review' ? 'on' : ''} onClick={() => go({ page: 'review', month: PLAN_MONTH.id })}>
               Review {PLAN_MONTH.label}{waiting > 0 && <span className="count">{waiting}</span>}
             </button>
@@ -127,6 +131,7 @@ function ClientApp({ c, sel, nav, theme, setTheme }: { c: CRoute; sel: Selection
       </header>
       <main className="c-main">
         {c.page === 'home' && <Home plan={PLAN_MONTH} report={LATEST_REPORT} go={go} />}
+        {c.page === 'account' && <AccountView open={open} client />}
         {c.page === 'review' && <Review month={PLAN_MONTH} open={open} />}
         {c.page === 'results' && <Results month={report} open={open} />}
       </main>
@@ -152,6 +157,7 @@ function TeamApp({ r, nav, theme, setTheme }: { r: Route; nav: (h: string, top?:
       case 'overview': return month.kind === 'report' ? <Overview {...props} month={month} /> : <PlanOverview {...props} />
       case 'posts': return <Posts {...props} />
       case 'plan': return <PlanView {...props} />
+      case 'account': return <AccountView open={open} />
       case 'boosts': return <Boosts open={open} />
       case 'trends': return <Trends open={open} go={go} />
       case 'collabs': return <Collabs open={open} />
@@ -178,7 +184,7 @@ function TeamApp({ r, nav, theme, setTheme }: { r: Route; nav: (h: string, top?:
           <span className="side-label">Views</span>
           {VIEWS.map((v) => (
             <button key={v.id} className={`nav-btn${r.view === v.id ? ' active' : ''}`} onClick={() => go({ view: v.id, sel: null })}>
-              <Icon name={v.icon} /><span>{v.label}</span>{v.scope === 'all' && <span className="nav-scope">Jul–Sep</span>}
+              <Icon name={v.icon} /><span>{v.label}</span>{v.scope === 'all' && <span className="nav-scope">{v.id === 'account' ? '28 days' : 'Jul–Sep'}</span>}
             </button>
           ))}
         </nav>
@@ -194,7 +200,7 @@ function TeamApp({ r, nav, theme, setTheme }: { r: Route; nav: (h: string, top?:
           <button className="menu-btn" onClick={() => setNavOpen(true)} aria-label="Menu"><Icon name="menu" /></button>
           <div>
             <span className="eyebrow">{DATA.brand.name}</span>
-            <h1>{viewDef.scope === 'all' ? `${viewDef.label} · Jul–Sep` : `${month.label} ${month.year}`}</h1>
+            <h1>{r.view === 'account' ? `Accounts · ${DATA.account.period.label}` : viewDef.scope === 'all' ? `${viewDef.label} · Jul–Sep` : `${month.label} ${month.year}`}</h1>
           </div>
           {viewDef.scope === 'month' && (
             <div className="months seg" role="tablist">

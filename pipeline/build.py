@@ -738,6 +738,7 @@ data = {
         {'name': 'Content calendar', 'detail': 'Google Sheet: <Month> details + Snapshot tabs'},
         {'name': 'Canva', 'detail': 'TGS monthly design files (creatives, last-minute evidence)'},
     ],
+    'account': json.load(open(os.path.join(RAW, 'account.json'))),
     'baselines': baselines, 'typical': typical, 'months': months, 'plan': plan, 'content': content, 'stories': stories,
 }
 os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)

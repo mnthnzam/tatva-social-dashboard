@@ -72,7 +72,23 @@ export interface ReportMonth { id: string; label: string; year: number; kind: 'r
 export interface PlanMonth { id: string; label: string; year: number; kind: 'plan'; summary: PlanSummary; insights: Insight[] }
 export type Month = ReportMonth | PlanMonth
 
+export interface AccountMetric { value: number; change: number }
+export interface AccountPlatform {
+  label: string; handle: string; followers: number; followersLabel: string
+  metrics: Record<string, AccountMetric>
+  split: Record<string, number>
+  daily: Record<string, (number | null)[]>
+  note?: string
+}
+export interface Account {
+  capturedAt: string
+  period: { start: string; end: string; label: string; compare: string }
+  days: string[]
+  platforms: Record<'instagram' | 'facebook', AccountPlatform>
+}
+
 export interface Dataset {
+  account: Account
   generatedAt: string; dataCutoff: string
   brand: { id: string; name: string; short: string; ig: string; fb: string }
   brands: { id: string; name: string; short: string; connected: boolean; reason?: string }[]

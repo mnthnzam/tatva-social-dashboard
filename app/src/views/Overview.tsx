@@ -31,11 +31,11 @@ export function Overview({ month, open, go }: P) {
       </p>
 
       <div className="tiles">
-        <StatTile label="Organic views" value={n(s.views_org)} cur={s.views_org} prev={prev?.summary.views_org} prevLabel={prev?.label} spark={spark((m) => m.summary.views_org)} />
+        <StatTile label="Organic views" value={n(s.views_org)} cur={s.views_org} prev={prev?.summary.views_org} prevLabel={prev?.label} spark={spark((m) => m.summary.views_org)} onClick={() => open({ kind: 'm', id: `views_org|${month.id}` })} />
         <StatTile label="Plan delivered" value={`${s.delivered}/${s.due}`} cur={s.delivered / Math.max(s.due, 1)} prev={prev ? prev.summary.delivered / Math.max(prev.summary.due, 1) : undefined} prevLabel={prev?.label}
           spark={spark((m) => m.summary.delivered / Math.max(m.summary.due, 1))} note={s.status['Upcoming'] ? `${s.status['Upcoming']} still upcoming` : undefined} />
-        <StatTile label="Interactions (organic)" value={n(s.inter_org)} cur={s.inter_org} prev={prev?.summary.inter_org} prevLabel={prev?.label} spark={spark((m) => m.summary.inter_org)} />
-        <StatTile label="Follows from posts" value={n(s.follows)} cur={s.follows} prev={prev?.summary.follows} prevLabel={prev?.label} spark={spark((m) => m.summary.follows)} />
+        <StatTile label="Interactions (organic)" value={n(s.inter_org)} cur={s.inter_org} prev={prev?.summary.inter_org} prevLabel={prev?.label} spark={spark((m) => m.summary.inter_org)} onClick={() => open({ kind: 'm', id: `inter_org|${month.id}` })} />
+        <StatTile label="Follows from posts" value={n(s.follows)} cur={s.follows} prev={prev?.summary.follows} prevLabel={prev?.label} spark={spark((m) => m.summary.follows)} onClick={() => open({ kind: 'm', id: `follows|${month.id}` })} />
       </div>
 
       <section>
