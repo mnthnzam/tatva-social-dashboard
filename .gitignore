@@ -1,0 +1,6 @@
+node_modules/
+app/dist/
+app/tsconfig.tsbuildinfo
+shots/
+pipeline/raw/meta_img/_done.json
+.DS_Store
