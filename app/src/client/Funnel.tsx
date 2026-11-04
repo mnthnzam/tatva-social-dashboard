@@ -24,8 +24,9 @@ export function FunnelStrip({ month }: { month: ReportMonth }) {
         {stages.map((st, i) => {
           const v = st.stage.value
           const prev = i > 0 ? stages[i - 1].stage.value : null
-          // Reach is summed across posts (a parent seen three times counts three), so no rate from reach to messages.
-          const rate = i > 1 && v !== null && prev ? v / prev : null
+          // Only visits and admissions are subsets of the step before. Reach is summed across posts, and lead forms
+          // don't pass through messages, so no rate is shown into conversations or enquiries.
+          const rate = i > 2 && v !== null && prev ? v / prev : null
           const srcs = Object.entries(st.stage.sources ?? {})
           return (
             <div key={st.key} className={`fn-stage${v === null ? ' empty' : ''}`}>
@@ -44,7 +45,7 @@ export function FunnelStrip({ month }: { month: ReportMonth }) {
         })}
       </div>
       {!tracked && L?.trackingNote && <p className="fine" style={{ marginTop: 10 }}>{L.trackingNote}</p>}
-      {tracked && <p className="fine" style={{ marginTop: 10 }}>From conversations on, each step shows its share of the step before. Leads with no source recorded are counted openly, not left out.</p>}
+      {tracked && <p className="fine" style={{ marginTop: 10 }}>Visits and admissions show their share of the step before. Lead-form enquiries don’t pass through messages, so those two aren’t chained. Leads with no source recorded are counted openly, not left out.</p>}
     </>
   )
 }

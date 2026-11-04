@@ -1,6 +1,5 @@
 {
   "_about": "Hand-entered lead, paid and context data per report month. Fill each null as the numbers arrive; null shows on the dashboard as 'awaiting', never as zero. Reach is computed from the posts, so it is not entered here. 'untagged' is the count at that stage with no source recorded: it is reported openly, not hidden.",
-
   "months": {
     "2026-09": {
       "tracked": false,
@@ -9,71 +8,228 @@
         "conversations": {
           "value": 42,
           "basis": "Messages started, 31 Aug – 27 Sep (Meta account view)",
-          "sources": { "Instagram messages": 35, "Facebook messages": 7 }
+          "sources": {
+            "Instagram messages": 35,
+            "Facebook messages": 7
+          }
         },
-        "enquiries": { "value": null },
-        "visits": { "value": null },
-        "admissions": { "value": null }
+        "enquiries": {
+          "value": null
+        },
+        "visits": {
+          "value": null
+        },
+        "admissions": {
+          "value": null
+        }
       },
       "paid": {
         "spend": null,
         "campaigns": [
-          { "name": "Same lesson, two ways in", "platform": "Instagram", "start": "2026-09-24", "end": "2026-09-30", "objective": null, "spend": null, "reach": null, "results": null, "resultType": null, "note": "Separate ad, not a boosted post, so it is not in the per-post numbers. Now paused." }
+          {
+            "name": "Same lesson, two ways in",
+            "platform": "Instagram",
+            "start": "2026-09-24",
+            "end": "2026-09-30",
+            "objective": null,
+            "spend": null,
+            "reach": null,
+            "results": null,
+            "resultType": null,
+            "note": "Separate ad, not a boosted post, so it is not in the per-post numbers. Now paused."
+          }
         ]
       },
       "context": []
     },
-
     "2026-10": {
       "tracked": true,
       "funnel": {
         "conversations": {
-          "value": null,
-          "basis": "Instagram and Facebook messages started, plus WhatsApp chats opened from social (WATI)",
-          "sources": { "Instagram messages": null, "Facebook messages": null, "WhatsApp from social": null },
+          "value": 34,
+          "basis": "Messages started, 1–31 Oct (Meta inbox insights). WhatsApp chats not in yet.",
+          "sources": {
+            "Instagram messages": 32,
+            "Facebook messages": 2,
+            "WhatsApp from social": null
+          },
           "admissionsRelated": null
         },
         "enquiries": {
-          "value": null,
-          "basis": "Enquiries in the P800 tracker created in October",
-          "sources": { "Meta lead forms": null, "Instagram / Facebook organic": null, "Website from social": null },
+          "value": 533,
+          "basis": "Meta lead-form leads in Leads Centre, 1–31 Oct. Tracker leads from other sources not in yet.",
+          "sources": {
+            "Meta lead forms": 533,
+            "Instagram / Facebook organic": null,
+            "Website from social": null
+          },
           "untagged": null
         },
         "visits": {
           "value": null,
           "basis": "Campus visits recorded against an October lead ID",
-          "sources": { "From social leads": null },
+          "sources": {
+            "From social leads": null
+          },
           "untagged": null
         },
         "admissions": {
           "value": null,
           "basis": "Admissions entered in the tracker against an October lead ID",
-          "sources": { "From social leads": null },
+          "sources": {
+            "From social leads": null
+          },
           "untagged": null
         }
       },
       "paid": {
         "spend": null,
-        "campaigns": []
+        "campaigns": [
+          {
+            "name": "Lead ads (instant forms)",
+            "platform": "Instagram + Facebook",
+            "start": "2026-10-09",
+            "end": "2026-10-26",
+            "objective": "Leads",
+            "spend": null,
+            "reach": null,
+            "results": 533,
+            "resultType": "leads",
+            "note": "Run from an ad account this login can't see, so spend and cost per lead are with the ads team. Two bursts, 9–13 Oct and 22–26 Oct; 926.5K of 946.3K Instagram views came from ads."
+          },
+          {
+            "name": "Boost: The Alumni Echo",
+            "platform": "Facebook",
+            "start": "2026-10-13",
+            "end": null,
+            "objective": null,
+            "spend": null,
+            "reach": 126841,
+            "results": null,
+            "resultType": null,
+            "note": "181.2K of the reel's 183.7K Facebook views came from the boost."
+          }
+        ]
       },
-      "context": []
+      "context": [
+        {
+          "date": "2026-10-09",
+          "text": "Lead ads start; daily views jump from about 15K to 70–98K until 13 Oct.",
+          "kind": "event"
+        },
+        {
+          "date": "2026-10-20",
+          "text": "Dussehra.",
+          "kind": "holiday"
+        },
+        {
+          "date": "2026-10-22",
+          "text": "Second burst of lead ads, to 26 Oct.",
+          "kind": "event"
+        },
+        {
+          "date": "2026-10-31",
+          "text": "Meta stopped reporting Facebook reach; viewers replaces it.",
+          "kind": "issue"
+        },
+        {
+          "date": null,
+          "text": "Instagram replied to 10.5% of messages in October, with an average reply time of 1h 47m (Meta inbox insights). 9 of 27 people who messaged came through ads.",
+          "kind": "issue"
+        },
+        {
+          "date": null,
+          "text": "None of the 533 Leads Centre leads is marked converted, qualified or lost, so Meta can't show a conversion rate.",
+          "kind": "issue"
+        }
+      ]
     }
   },
-
   "inputs": {
     "month": "2026-10",
     "items": [
-      { "id": "meta-posts", "label": "Meta per-post export, IG + FB, 1–31 Oct", "owner": "Zamstars", "status": "waiting", "feeds": "Every post, verdicts, reach" },
-      { "id": "meta-account", "label": "Meta account overview pulled on or after 1 Nov (1–31 Oct vs Sep)", "owner": "Zamstars", "status": "waiting", "feeds": "Accounts section" },
-      { "id": "meta-inbox", "label": "DM count for October, with admissions questions tagged in the inbox", "owner": "Zamstars", "status": "waiting", "feeds": "Conversations" },
-      { "id": "calendar", "label": "Final October calendar: 💵 boosts, last-minute and collab posts, owner per post, funnel job and 4C per post", "owner": "Content team", "status": "waiting", "feeds": "Plan delivery, who posted, post tags" },
-      { "id": "canva", "label": "Canva export of every October creative", "owner": "Designers", "status": "waiting", "feeds": "Post images" },
-      { "id": "reels", "label": "Reels planned vs delivered, and which are still waiting on footage", "owner": "Content team", "status": "waiting", "feeds": "Plan delivery" },
-      { "id": "paid", "label": "Paid Meta: spend, reach, results and cost per result by campaign; Lead Gen leads by ad set", "owner": "Vinod / Ranjith", "status": "waiting", "feeds": "Paid section, enquiries" },
-      { "id": "wati", "label": "WATI: chats started by source, 'Book a visit' taps", "owner": "Deepthi", "status": "waiting", "feeds": "Conversations, visits" },
-      { "id": "tracker", "label": "P800 tracker: October leads, visits and admissions by source (read-only)", "owner": "Zamstars (Supabase)", "status": "waiting", "feeds": "Enquiries, visits, admissions" },
-      { "id": "ga4", "label": "GA4: sessions and form submissions from Instagram / Facebook", "owner": "Ranjith", "status": "waiting", "feeds": "Enquiries" },
-      { "id": "context", "label": "October events, holidays and account issues (ad pauses, rejected posts)", "owner": "Zamstars", "status": "waiting", "feeds": "Explanations for spikes and drops" }
+      {
+        "id": "meta-posts",
+        "label": "Meta per-post export, IG + FB, 1–31 Oct",
+        "owner": "Zamstars",
+        "status": "received",
+        "feeds": "Every post, verdicts, reach",
+        "note": "Pulled 4 Nov from Business Suite, 28 Sep–31 Oct."
+      },
+      {
+        "id": "meta-account",
+        "label": "Meta account overview pulled on or after 1 Nov (1–31 Oct vs Sep)",
+        "owner": "Zamstars",
+        "status": "received",
+        "feeds": "Accounts section",
+        "note": "Pulled 4 Nov, 1–31 Oct vs previous 31 days."
+      },
+      {
+        "id": "meta-inbox",
+        "label": "DM count for October, with admissions questions tagged in the inbox",
+        "owner": "Zamstars",
+        "status": "partial",
+        "feeds": "Conversations",
+        "note": "Message counts in; admissions questions not tagged yet."
+      },
+      {
+        "id": "calendar",
+        "label": "Final October calendar: 💵 boosts, last-minute and collab posts, owner per post, funnel job and 4C per post",
+        "owner": "Content team",
+        "status": "waiting",
+        "feeds": "Plan delivery, who posted, post tags"
+      },
+      {
+        "id": "canva",
+        "label": "Canva export of every October creative",
+        "owner": "Designers",
+        "status": "waiting",
+        "feeds": "Post images"
+      },
+      {
+        "id": "reels",
+        "label": "Reels planned vs delivered, and which are still waiting on footage",
+        "owner": "Content team",
+        "status": "waiting",
+        "feeds": "Plan delivery"
+      },
+      {
+        "id": "paid",
+        "label": "Paid Meta: spend, reach, results and cost per result by campaign; Lead Gen leads by ad set",
+        "owner": "Vinod / Ranjith",
+        "status": "partial",
+        "feeds": "Paid section, enquiries",
+        "note": "Lead count (533) in from Leads Centre; spend needs the ad account."
+      },
+      {
+        "id": "wati",
+        "label": "WATI: chats started by source, 'Book a visit' taps",
+        "owner": "Deepthi",
+        "status": "waiting",
+        "feeds": "Conversations, visits"
+      },
+      {
+        "id": "tracker",
+        "label": "P800 tracker: October leads, visits and admissions by source (read-only)",
+        "owner": "Zamstars (Supabase)",
+        "status": "waiting",
+        "feeds": "Enquiries, visits, admissions"
+      },
+      {
+        "id": "ga4",
+        "label": "GA4: sessions and form submissions from Instagram / Facebook",
+        "owner": "Ranjith",
+        "status": "waiting",
+        "feeds": "Enquiries"
+      },
+      {
+        "id": "context",
+        "label": "October events, holidays and account issues (ad pauses, rejected posts)",
+        "owner": "Zamstars",
+        "status": "partial",
+        "feeds": "Explanations for spikes and drops",
+        "note": "Ad bursts and platform changes noted; school events still to add."
+      }
     ]
   }
 }

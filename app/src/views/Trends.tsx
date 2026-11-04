@@ -1,3 +1,4 @@
+import { RANGE } from '../lib/data'
 import { useState } from 'react'
 import type { Selection } from '../components/Drawer'
 import type { Route } from '../App'
@@ -75,7 +76,7 @@ export function Trends({ open, go }: { open: (s: Selection) => void; go: (r: Par
 
       <div className="two">
         <section>
-          <div className="s-head"><h2 className="s-title">Best of Jul–Sep</h2></div>
+          <div className="s-head"><h2 className="s-title">Best of {RANGE}</h2></div>
           <div className="grid g4" style={{ gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>{top.map((c) => <TeamCard key={c.id} c={c} open={open} />)}</div>
         </section>
         <section className="panel">

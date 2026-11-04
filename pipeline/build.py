@@ -23,8 +23,8 @@ APP = os.path.join(HERE, '..', 'app')
 OUT_JSON = os.path.join(APP, 'src', 'data', 'tgs.json')
 OUT_IMG = os.path.join(APP, 'public', 'creatives')
 YEAR = 2026
-REPORT_MONTHS = [7, 8, 9]
-PLAN_MONTHS = [10]
+REPORT_MONTHS = [7, 8, 9, 10]
+PLAN_MONTHS = []  # next month's plan goes here once its calendar is cleaned (raw/<mon>_items.json)
 MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
                'September', 'October', 'November', 'December']
 
@@ -358,6 +358,9 @@ def plan_creative(fname):
 
 plan = []
 assigned = set()
+# The cleaned October plan (raw/oct_items.json) carries the creatives and footage notes; October is now a
+# report month, so its calendar rows are matched like the others and enriched from it by date.
+OCT_CLEAN = {o['date']: o for o in json.load(open(os.path.join(RAW, 'oct_items.json'))) if o.get('date')}
 for month in REPORT_MONTHS:
     snap = snapshot(month)
     for row in details(month):
@@ -400,9 +403,10 @@ for month in REPORT_MONTHS:
             lag, status = None, 'Upcoming'
         else:
             lag, status = None, 'Not posted'
+        oc = OCT_CLEAN.get(str(row['date'])) if month == 10 else None
         plan.append({
             'id': row['key'], 'month': f"{YEAR}-{month:02d}", 'date': str(row['date']),
-            'title': rec.get('title') or row['bucket'], 'bucket': row['bucket'], 'format': fmt,
+            'title': rec.get('title') or (oc or {}).get('title') or row['bucket'], 'bucket': row['bucket'], 'format': fmt,
             'platforms': sn.get('platforms') or 'Meta', 'owner': owner, 'ownerInferred': inferred,
             'dependency': dependency(owner, fmt, row['copy']), 'designer': row['designer'] or None,
             'sheetStatus': row['sheetStatus'] or None, 'boostPlanned': bool(sn.get('boost')),
@@ -410,16 +414,17 @@ for month in REPORT_MONTHS:
             'status': status, 'lag': lag, 'contentId': match['id'] if match else None,
             'replacedBy': find_content(rec['replacedBy'])['id'] if rec.get('replacedBy') else None,
             'confidence': rec.get('confidence', 'confirmed' if match else None),
-            'note': rec.get('note'), 'creative': plan_creative(rec.get('creative')),
+            'note': rec.get('note'),
+            'creative': plan_creative(rec.get('creative') or (os.path.basename(oc['image']) if oc and oc.get('image') else None)),
             'needsFootage': False, 'footageDue': None, 'dueText': None, 'need': None,
-            **tags_of(rec),
+            **tags_of({**(oc or {}), **rec}),
         })
 
-# October: already-cleaned plan items + snapshot boost flags
-oct_snap = snapshot(10)
+# Next month's plan: already-cleaned plan items + snapshot boost flags (only while October is a plan month)
+oct_snap = snapshot(10) if 10 in PLAN_MONTHS else {}
 oct_rows = {str(r['date']): r for r in details(10)}
 seen_undated = 0
-for o in json.load(open(os.path.join(RAW, 'oct_items.json'))):
+for o in (json.load(open(os.path.join(RAW, 'oct_items.json'))) if 10 in PLAN_MONTHS else []):
     d = o.get('date')
     sn = oct_snap.get(dt.date.fromisoformat(d), {}) if d else {}
     key = f'{d}#0' if d else f'undated#{seen_undated}'
@@ -730,6 +735,7 @@ for mnum in PLAN_MONTHS:
 data = {
     'generatedAt': dt.datetime.now().strftime('%Y-%m-%d %H:%M'),
     'dataCutoff': REC['dataCutoff'],
+    'rangeLabel': f"{MONTH_NAMES[REPORT_MONTHS[0] - 1][:3]}–{MONTH_NAMES[REPORT_MONTHS[-1] - 1][:3]}",
     'brand': {'id': 'tgs', 'name': 'Tatva Global School', 'short': 'TGS', 'ig': 'tatva_global_school',
               'fb': 'Tatva Global School'},
     'brands': [

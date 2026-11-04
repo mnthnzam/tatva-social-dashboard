@@ -1,3 +1,4 @@
+import { RANGE } from '../lib/data'
 import { noPreview } from '../lib/data'
 import { JOB_LABEL } from '../lib/data'
 import { useEffect, useState } from 'react'
@@ -218,7 +219,7 @@ function PostCompare({ c, mode }: { c: Content; mode: Mode }) {
       <div className="s-head" style={{ marginBottom: 0 }}>
         <h3 className="s-title" style={{ fontSize: 16 }}>Compare</h3>
         <select className="sel" value={with_} onChange={(e) => setWith(e.target.value)} aria-label="Compare with">
-          <option value="typical">Typical {c.format.toLowerCase()} (Jul–Sep)</option>
+          <option value="typical">Typical {c.format.toLowerCase()} ({RANGE})</option>
           <option value="month">Average post this month</option>
           <optgroup label="Another post">
             {byMonth.map((x) => <option key={x.id} value={x.id}>{x.date.slice(8, 10)}/{x.date.slice(5, 7)} · {x.title.slice(0, 48)}</option>)}

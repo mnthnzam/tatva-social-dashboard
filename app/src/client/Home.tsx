@@ -7,9 +7,9 @@ import { Icon } from '../components/Icon'
 import type { CRoute } from '../App'
 import { AccountView } from '../views/AccountView'
 
-export function Home({ plan, report, go, open }: { plan: PlanMonth; report: ReportMonth; go: (r: CRoute) => void; open: (s: Selection) => void }) {
-  const pl = monthPlan(plan.id)
-  const ps = plan.summary
+export function Home({ plan, report, go, open }: { plan: PlanMonth | null; report: ReportMonth; go: (r: CRoute) => void; open: (s: Selection) => void }) {
+  const pl = plan ? monthPlan(plan.id) : []
+  const ps = plan?.summary
   const s = report.summary
   const withDesign = pl.filter((p) => p.creative).slice(0, 4)
   const top = monthContent(report.id).filter((c) => c.verdict?.key === 'standout').sort((a, b) => (b.verdict!.score ?? 0) - (a.verdict!.score ?? 0)).slice(0, 4)
@@ -21,11 +21,11 @@ export function Home({ plan, report, go, open }: { plan: PlanMonth; report: Repo
       <header className="p-head">
         <span className="eyebrow">Tatva Global School · Instagram & Facebook</span>
         <h1 className="p-title">Your social media at a glance</h1>
-        <p className="p-sub">What’s going out in {plan.label}, how {report.label} went, and where your pages stand over the last 28 days.</p>
+        <p className="p-sub">{plan ? <>What’s going out in {plan.label}, how {report.label} went</> : <>How {report.label} went</>}, and where your pages stand over {DATA.account.period.label}.</p>
       </header>
 
       <div className="home-grid">
-        <button className="home-card primary" onClick={() => go({ page: 'plan' })}>
+        {plan && ps ? <button className="home-card primary" onClick={() => go({ page: 'plan' })}>
           <span className="hc-step">Coming up</span>
           <h2>{plan.label} plan</h2>
           <p>{plural(ps.planned, 'post')} in the calendar. {ps.designReady} designs are final; {plural(ps.formats.Reel ?? 0, 'reel')} get made once footage comes in from your team.</p>
@@ -36,7 +36,13 @@ export function Home({ plan, report, go, open }: { plan: PlanMonth; report: Repo
             {nextDue && <div className="hc-stat"><strong>{day(nextDue.footageDue)}</strong><span>next footage due</span></div>}
           </div>
           <span className="btn btn-primary hc-cta">See the plan <Icon name="arrow" size={16} /></span>
-        </button>
+        </button> : (
+          <div className="home-card">
+            <span className="hc-step">Coming up</span>
+            <h2>{nextLabel(report.id)} plan</h2>
+            <p>The {nextLabel(report.id)} calendar isn’t on the dashboard yet. It will appear here once it’s signed off.</p>
+          </div>
+        )}
         <button className="home-card" onClick={() => go({ page: 'results', month: report.id })}>
           <span className="hc-step">Last month</span>
           <h2>How {report.label} went</h2>
@@ -69,4 +75,9 @@ export function Home({ plan, report, go, open }: { plan: PlanMonth; report: Repo
       </section>
     </>
   )
+}
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+function nextLabel(id: string) {
+  return MONTHS[Number(id.slice(5, 7)) % 12]
 }

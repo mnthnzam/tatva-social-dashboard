@@ -112,7 +112,7 @@ export interface Account {
 
 export interface Dataset {
   account: Account
-  generatedAt: string; dataCutoff: string
+  generatedAt: string; dataCutoff: string; rangeLabel?: string
   brand: { id: string; name: string; short: string; ig: string; fb: string }
   brands: { id: string; name: string; short: string; connected: boolean; reason?: string }[]
   sources: { name: string; detail: string }[]

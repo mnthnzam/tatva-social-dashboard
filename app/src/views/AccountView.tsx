@@ -6,7 +6,7 @@ import { DailyLines } from '../components/Charts'
 
 const LABEL: Record<string, string> = {
   views: 'Views', reach: 'Accounts reached', viewers: 'Viewers', interactions: 'Interactions', follows: 'New follows',
-  unfollows: 'Unfollows', visits: 'Page visits', conversations: 'Messages started',
+  unfollows: 'Unfollows', visits: 'Page visits', conversations: 'Messages started', clicks: 'Link clicks',
 }
 
 function Change({ change, invert }: { change: number; invert?: boolean }) {
@@ -32,7 +32,7 @@ export function AccountView({ open }: { open: (s: Selection) => void }) {
           return (
             <section key={k} className="acct">
               <div className="acct-h"><h3><span className="dot" style={{ background: `var(--${k === 'instagram' ? 'ig' : 'fb'})`, marginRight: 8 }} />{p.label}</h3><span>{k === 'instagram' ? '@' : ''}{p.handle}</span></div>
-              <div className="acct-big"><strong>{p.followersLabel}</strong><span>followers · {net >= 0 ? '+' : ''}{net} net in 28 days ({p.metrics.follows?.value} follows, {p.metrics.unfollows?.value} unfollows)</span></div>
+              <div className="acct-big"><strong>{p.followersLabel}</strong><span>followers · {p.metrics.unfollows ? <>{net >= 0 ? '+' : ''}{net} net ({p.metrics.follows?.value} follows, {p.metrics.unfollows.value} unfollows)</> : <>{p.metrics.follows?.value ?? 0} new follows</>} in {acc.period.label}</span></div>
               <div className="acct-mets">
                 {Object.entries(p.metrics).map(([mk, x]) => (
                   <button key={mk} className="acct-met" onClick={() => open({ kind: 'm', id: `acct|${k}|${mk}` })}>
@@ -40,6 +40,7 @@ export function AccountView({ open }: { open: (s: Selection) => void }) {
                   </button>
                 ))}
               </div>
+              {p.note && k !== 'instagram' && <p className="fine">{p.note}</p>}
               {p.split.viewsFromFollowers !== undefined && (
                 <div>
                   <div className="split" style={{ height: 8 }}>

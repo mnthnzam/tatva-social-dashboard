@@ -6,6 +6,8 @@ export const DATA = raw as unknown as Dataset
 export const contentById = new Map<string, Content>(DATA.content.map((c) => [c.id, c]))
 export const planById = new Map<string, PlanItem>(DATA.plan.map((p) => [p.id, p]))
 
+export const RANGE = DATA.rangeLabel ?? 'Jul–Sep'
+
 export const reportMonths = DATA.months.filter((m): m is ReportMonth => m.kind === 'report')
 
 export const MARKERS: Record<Marker, { label: string; short: string; hint: string }> = {
@@ -28,7 +30,7 @@ export const baselineFor = (c: Content) => DATA.baselines[c.format]?.median ?? n
 export const imageFor = (c: Content | undefined, p?: PlanItem) => c?.image ?? p?.creative ?? null
 
 export const noPreview = (c: Content) =>
-  c.marker === 'collab' ? 'Partner post — Meta doesn’t share its image' : c.format === 'Reel' ? 'Reel cover is a blank frame' : 'No preview'
+  c.marker === 'collab' ? 'Partner post — Meta doesn’t share its image' : c.format === 'Reel' ? 'Reel cover not available from Meta' : 'No preview'
 
 export const JOB_LABEL: Record<FunnelJob, string> = { reach: 'Reach', enquiry: 'Enquiry', visit: 'Visit' }
 

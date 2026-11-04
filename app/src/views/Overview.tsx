@@ -1,3 +1,4 @@
+import { RANGE } from '../lib/data'
 import type { ReportMonth } from '../types'
 import type { Selection } from '../components/Drawer'
 import type { Route } from '../App'
@@ -84,7 +85,7 @@ export function Overview({ month, open, go }: P) {
         </section>
 
         <section className="panel">
-          <div className="panel-head"><h3>Formats this month</h3><span className="muted">Median organic views · ▏= Jul–Sep typical</span></div>
+          <div className="panel-head"><h3>Formats this month</h3><span className="muted">Median organic views · ▏= {RANGE} typical</span></div>
           {Object.entries(s.formats).sort((a, b) => b[1].median - a[1].median).map(([f, v]) => (
             <div key={f} style={{ marginBottom: 6 }}>
               <HRows items={[{ key: f, label: `${f} · ${plural(v.count, 'post')}`, value: v.median, tone: v.median >= (DATA.baselines[f]?.median ?? 0) ? 'good' : 'bad' }]}

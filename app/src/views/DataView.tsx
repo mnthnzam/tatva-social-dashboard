@@ -1,3 +1,4 @@
+import { RANGE } from '../lib/data'
 import { Fragment } from 'react'
 import type { Selection } from '../components/Drawer'
 import { DATA, MARKERS, reportDue } from '../lib/data'
@@ -90,8 +91,8 @@ export function DataView({ open }: { open: (s: Selection) => void }) {
           <h4 className="fine" style={{ margin: "16px 0 8px" }}>Definitions</h4>
           <dl className="kv">
             <dt>Organic views</dt><dd>Views minus the views Meta attributes to ads. IG + FB copies of a post are added together.</dd>
-            <dt>Against format</dt><dd>Organic views ÷ the Jul–Sep median for that format ({Object.entries(DATA.baselines).map(([k, v]) => `${k} ${n(v.median)}`).join(', ')}).</dd>
-            <dt>Verdict</dt><dd>Reach and engagement (reactions, comments, shares, saves) against the Jul–Sep median for the format, combined as a geometric mean. Standout ≥ 1.5×, Steady 0.75–1.5×, Quiet &lt; 0.75×. Boosted posts are judged separately.</dd>
+            <dt>Against format</dt><dd>Organic views ÷ the {RANGE} median for that format ({Object.entries(DATA.baselines).map(([k, v]) => `${k} ${n(v.median)}`).join(', ')}).</dd>
+            <dt>Verdict</dt><dd>Reach and engagement (reactions, comments, shares, saves) against the {RANGE} median for the format, combined as a geometric mean. Standout ≥ 1.5×, Steady 0.75–1.5×, Quiet &lt; 0.75×. Boosted posts are judged separately.</dd>
             <dt>Late / Early</dt><dd>Went live on a different day from the calendar date (days shown).</dd>
             {Object.values(MARKERS).map((m) => (<Fragment key={m.label}><dt>{m.label}</dt><dd>{m.hint}</dd></Fragment>))}
           </dl>

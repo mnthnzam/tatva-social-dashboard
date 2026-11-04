@@ -1,3 +1,4 @@
+import { RANGE } from '../lib/data'
 import { noPreview } from '../lib/data'
 import { useMemo, useState } from 'react'
 import type { Content, ReportMonth, VerdictKey } from '../types'
@@ -92,7 +93,7 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
 
       {best.length > 0 && (
         <section className="section">
-          <div className="s-head"><h2 className="s-title">What worked</h2><span className="s-note">Compared with a typical post of the same format, Jul–Sep</span></div>
+          <div className="s-head"><h2 className="s-title">What worked</h2><span className="s-note">Compared with a typical post of the same format, {RANGE}</span></div>
           <div className="stack">{best.map((c) => <Feature key={c.id} c={c} open={open} />)}</div>
         </section>
       )}

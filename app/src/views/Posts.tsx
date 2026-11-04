@@ -1,3 +1,4 @@
+import { RANGE } from '../lib/data'
 import { useMemo, useState } from 'react'
 import type { Format, Marker, Month } from '../types'
 import type { Selection } from '../components/Drawer'
@@ -44,7 +45,7 @@ export function Posts({ month, open }: P) {
       <div className="filters">
         <div className="seg">
           <button className={scope === 'month' ? 'on' : ''} onClick={() => setScope('month')}>{month.label}</button>
-          <button className={scope === 'all' ? 'on' : ''} onClick={() => setScope('all')}>Jul–Sep</button>
+          <button className={scope === 'all' ? 'on' : ''} onClick={() => setScope('all')}>{RANGE}</button>
         </div>
         {(Object.keys(MARKERS) as Marker[]).map((m) => (
           <button key={m} className={`fchip${markers.has(m) ? ' on' : ''}`} onClick={() => toggle(m)} title={MARKERS[m].hint}>{MARKERS[m].short}<em>{count(m)}</em></button>

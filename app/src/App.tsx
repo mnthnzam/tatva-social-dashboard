@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { PlanMonth, ReportMonth } from './types'
-import { DATA, reportMonths } from './lib/data'
+import { DATA, RANGE, reportMonths } from './lib/data'
 import { monthShort } from './lib/format'
 import { useTheme, type Theme } from './lib/theme'
 import { Drawer, type Selection } from './components/Drawer'
@@ -34,7 +34,7 @@ const VIEWS: { id: View; label: string; icon: string; scope: 'month' | 'all' }[]
 ]
 
 const LATEST_REPORT = reportMonths[reportMonths.length - 1]
-const PLAN_MONTH = DATA.months.find((m): m is PlanMonth => m.kind === 'plan')!
+const PLAN_MONTH = DATA.months.find((m): m is PlanMonth => m.kind === 'plan') ?? null
 
 type Parsed = { mode: 'client'; c: CRoute; sel: Selection } | { mode: 'team'; t: Route }
 
@@ -53,7 +53,7 @@ function parse(hash: string): Parsed {
     return { mode: 'team', t: { month, view, sel } }
   }
   // #/review (old approval page) and #/account (old accounts page) keep working as links
-  if (parts[0] === 'plan' || parts[0] === 'review') return { mode: 'client', c: { page: 'plan' }, sel }
+  if ((parts[0] === 'plan' || parts[0] === 'review') && PLAN_MONTH) return { mode: 'client', c: { page: 'plan' }, sel }
   if (parts[0] === 'results') {
     const month = reportMonths.some((m) => m.id === parts[1]) ? parts[1] : LATEST_REPORT.id
     return { mode: 'client', c: { page: 'results', month }, sel }
@@ -107,7 +107,7 @@ function ClientApp({ c, sel, nav, theme, setTheme }: { c: CRoute; sel: Selection
           <button className="c-brand" onClick={() => go({ page: 'home' })}><span className="mark">T</span><span className="nm">Tatva Global School</span></button>
           <nav className="c-nav">
             <button className={c.page === 'home' ? 'on' : ''} onClick={() => go({ page: 'home' })}>Home</button>
-            <button className={c.page === 'plan' ? 'on' : ''} onClick={() => go({ page: 'plan' })}>{PLAN_MONTH.label} plan</button>
+            {PLAN_MONTH && <button className={c.page === 'plan' ? 'on' : ''} onClick={() => go({ page: 'plan' })}>{PLAN_MONTH.label} plan</button>}
             <button className={c.page === 'results' ? 'on' : ''} onClick={() => go({ page: 'results', month: c.page === 'results' ? report.id : LATEST_REPORT.id })}>Results</button>
           </nav>
           <div className="c-right">
@@ -125,7 +125,7 @@ function ClientApp({ c, sel, nav, theme, setTheme }: { c: CRoute; sel: Selection
       </header>
       <main className="c-main">
         {c.page === 'home' && <Home plan={PLAN_MONTH} report={LATEST_REPORT} go={go} open={open} />}
-        {c.page === 'plan' && <Plan month={PLAN_MONTH} open={open} />}
+        {c.page === 'plan' && PLAN_MONTH && <Plan month={PLAN_MONTH} open={open} />}
         {c.page === 'results' && <Results month={report} open={open} />}
       </main>
       <Drawer sel={sel} onClose={close} onOpen={open} mode="client" />
@@ -177,7 +177,7 @@ function TeamApp({ r, nav, theme, setTheme }: { r: Route; nav: (h: string, top?:
           <span className="side-label">Views</span>
           {VIEWS.map((v) => (
             <button key={v.id} className={`nav-btn${r.view === v.id ? ' active' : ''}`} onClick={() => go({ view: v.id, sel: null })}>
-              <Icon name={v.icon} /><span>{v.label}</span>{v.scope === 'all' && <span className="nav-scope">{v.id === 'account' ? '28 days' : 'Jul–Sep'}</span>}
+              <Icon name={v.icon} /><span>{v.label}</span>{v.scope === 'all' && <span className="nav-scope">{v.id === 'account' ? DATA.account.period.label : RANGE}</span>}
             </button>
           ))}
         </nav>
@@ -193,7 +193,7 @@ function TeamApp({ r, nav, theme, setTheme }: { r: Route; nav: (h: string, top?:
           <button className="menu-btn" onClick={() => setNavOpen(true)} aria-label="Menu"><Icon name="menu" /></button>
           <div>
             <span className="eyebrow">{DATA.brand.name}</span>
-            <h1>{r.view === 'account' ? `Accounts · ${DATA.account.period.label}` : viewDef.scope === 'all' ? `${viewDef.label} · Jul–Sep` : `${month.label} ${month.year}`}</h1>
+            <h1>{r.view === 'account' ? `Accounts · ${DATA.account.period.label}` : viewDef.scope === 'all' ? `${viewDef.label} · ${RANGE}` : `${month.label} ${month.year}`}</h1>
           </div>
           {viewDef.scope === 'month' && (
             <div className="months seg" role="tablist">
