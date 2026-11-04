@@ -577,3 +577,17 @@ textarea, input, select { font: inherit; color: var(--ink); }
 .web-list b { text-align: right; font-variant-numeric: tabular-nums; }
 .web-list em { font-style: normal; font-size: 12.5px; color: var(--ink-3); }
 @media (max-width: 860px) { .web-list li { grid-template-columns: 120px minmax(0, 1fr) 52px; } .web-list em { display: none; } }
+
+/* ============================================================ month tabs (Results) */
+.month-tabs { display: flex; align-items: center; gap: 6px; margin-bottom: 28px; }
+.mt-list { display: flex; gap: 4px; padding: 4px; background: var(--sunken); border-radius: 12px; overflow-x: auto; scrollbar-width: none; }
+.mt-list::-webkit-scrollbar { display: none; }
+.mt-list button { display: flex; flex-direction: column; align-items: center; min-width: 58px; padding: 6px 12px; border-radius: 9px; color: var(--ink-2); transition: background 0.15s, color 0.15s; }
+.mt-list button span { font-size: 14px; font-weight: 600; line-height: 1.2; }
+.mt-list button em { font-style: normal; font-size: 11px; color: var(--ink-3); line-height: 1.2; }
+.mt-list button:hover { color: var(--ink); }
+.mt-list button.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(18, 23, 38, 0.08), 0 2px 8px rgba(18, 23, 38, 0.06); }
+.mt-list button.on em { color: var(--accent-text); }
+.mt-step { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; color: var(--ink-2); border: 1px solid var(--line); background: var(--surface); }
+.mt-step:hover:not(:disabled) { border-color: var(--line-strong); color: var(--ink); }
+.mt-step:disabled { opacity: 0.35; cursor: default; }

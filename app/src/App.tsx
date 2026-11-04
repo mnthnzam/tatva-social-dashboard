@@ -111,11 +111,6 @@ function ClientApp({ c, sel, nav, theme, setTheme }: { c: CRoute; sel: Selection
             <button className={c.page === 'results' ? 'on' : ''} onClick={() => go({ page: 'results', month: c.page === 'results' ? report.id : LATEST_REPORT.id })}>Results</button>
           </nav>
           <div className="c-right">
-            {c.page === 'results' && (
-              <select className="btn btn-quiet btn-sm" value={report.id} onChange={(e) => go({ page: 'results', month: e.target.value })} aria-label="Month">
-                {[...reportMonths].reverse().map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
-              </select>
-            )}
             <ThemeToggle theme={theme} set={setTheme} />
             <button className="mode-switch" onClick={() => nav(tHash({ month: LATEST_REPORT.id, view: 'overview', sel: null }))} title="Zamstars team view">
               <Icon name="swap" size={14} /><span>Team view</span>
@@ -126,7 +121,7 @@ function ClientApp({ c, sel, nav, theme, setTheme }: { c: CRoute; sel: Selection
       <main className="c-main">
         {c.page === 'home' && <Home plan={PLAN_MONTH} report={LATEST_REPORT} go={go} open={open} />}
         {c.page === 'plan' && PLAN_MONTH && <Plan month={PLAN_MONTH} open={open} />}
-        {c.page === 'results' && <Results month={report} open={open} />}
+        {c.page === 'results' && <Results month={report} open={open} go={(id) => go({ page: 'results', month: id })} />}
       </main>
       <Drawer sel={sel} onClose={close} onOpen={open} mode="client" />
     </div>

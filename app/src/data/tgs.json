@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-04 11:36",
+ "generatedAt": "2026-11-04 11:44",
  "dataCutoff": "2026-10-31",
  "rangeLabel": "Jul–Oct",
  "brand": {
@@ -7563,7 +7563,12 @@
      "inter": 32
     }
    },
-   "image": null,
+   "image": {
+    "src": "creatives/m/1508257594652601.jpg",
+    "w": 720,
+    "h": 1280,
+    "from": "meta"
+   },
    "marker": "unconfirmed",
    "planId": null,
    "title": "Admissions FAQ: what parents ask",
@@ -8994,7 +8999,12 @@
      "inter": 53
     }
    },
-   "image": null,
+   "image": {
+    "src": "creatives/m/18097750802411919.jpg",
+    "w": 720,
+    "h": 1280,
+    "from": "meta"
+   },
    "marker": "planned",
    "planId": "2026-09-22#0",
    "title": "Tatvotsav reel (1)",
@@ -9481,7 +9491,12 @@
      "inter": 384
     }
    },
-   "image": null,
+   "image": {
+    "src": "creatives/m/1538427478302279.jpg",
+    "w": 720,
+    "h": 1280,
+    "from": "meta"
+   },
    "marker": "unconfirmed",
    "planId": null,
    "title": "Tatva Swasth Sankalp: a 6 a.m. fitness morning",
@@ -9719,7 +9734,12 @@
      "inter": 2731
     }
    },
-   "image": null,
+   "image": {
+    "src": "creatives/m/18377218351239922.jpg",
+    "w": 720,
+    "h": 1280,
+    "from": "meta"
+   },
    "marker": "planned",
    "planId": "2026-10-30#0",
    "title": "The Alumni Echo",
@@ -10042,7 +10062,12 @@
      "inter": 129
     }
    },
-   "image": null,
+   "image": {
+    "src": "creatives/m/17979278349068682.jpg",
+    "w": 720,
+    "h": 1280,
+    "from": "meta"
+   },
    "marker": "unconfirmed",
    "planId": null,
    "title": "Inside Pakaashala, the school kitchen",

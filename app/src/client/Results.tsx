@@ -44,7 +44,7 @@ const FILTERS: { key: 'all' | VerdictKey; label: string }[] = [
   { key: 'all', label: 'All' }, { key: 'standout', label: 'Standout' }, { key: 'steady', label: 'Steady' }, { key: 'quiet', label: 'Quiet' }, { key: 'boosted', label: 'Boosted' },
 ]
 
-export function Results({ month, open }: { month: ReportMonth; open: (s: Selection) => void }) {
+export function Results({ month, open, go }: { month: ReportMonth; open: (s: Selection) => void; go: (id: string) => void }) {
   const [filter, setFilter] = useState<'all' | VerdictKey>('all')
   const idx = reportMonths.findIndex((m) => m.id === month.id)
   const prev = idx > 0 ? reportMonths[idx - 1] : undefined
@@ -63,6 +63,18 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
 
   return (
     <>
+      <nav className="month-tabs" aria-label="Report month">
+        <button className="mt-step" disabled={!prev} onClick={() => prev && go(prev.id)} aria-label="Previous month"><Icon name="chevron-left" size={16} /></button>
+        <div className="mt-list" role="tablist">
+          {reportMonths.map((m) => (
+            <button key={m.id} role="tab" aria-selected={m.id === month.id} className={m.id === month.id ? 'on' : ''} onClick={() => go(m.id)}>
+              <span>{m.label.slice(0, 3)}</span><em>{m.year}</em>
+            </button>
+          ))}
+        </div>
+        <button className="mt-step" disabled={idx === reportMonths.length - 1} onClick={() => idx < reportMonths.length - 1 && go(reportMonths[idx + 1].id)} aria-label="Next month"><Icon name="chevron-right" size={16} /></button>
+      </nav>
+
       <header className="p-head">
         <span className="eyebrow">{month.label} {month.year} · Results{month.value ? ` · Value of the month: ${month.value}` : ''}</span>
         <h1 className="p-title">How {month.label} went</h1>
