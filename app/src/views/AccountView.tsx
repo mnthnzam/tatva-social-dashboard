@@ -19,6 +19,10 @@ export function AccountView({ open }: { open: (s: Selection) => void }) {
   const acc = DATA.account
   const [metric, setMetric] = useState<'views' | 'interactions' | 'follows'>('views')
   const plats = ['instagram', 'facebook'] as const
+  // Any drop of 30% or more gets a reason line. No reason entered yet → said plainly, not hidden.
+  const moves = plats.flatMap((k) => Object.entries(acc.platforms[k].metrics)
+    .filter(([mk, x]) => (mk === 'unfollows' ? x.change >= 0.3 : x.change <= -0.3))
+    .map(([mk, x]) => ({ key: `${k}-${mk}`, label: `${acc.platforms[k].label} · ${LABEL[mk] ?? mk}`, change: x.change, why: x.why })))
   return (
     <>
       <div className="acct-grid">
@@ -49,6 +53,17 @@ export function AccountView({ open }: { open: (s: Selection) => void }) {
           )
         })}
       </div>
+
+      {moves.length > 0 && (
+        <section className="panel" style={{ marginTop: 18 }}>
+          <div className="panel-head"><h3>Big moves, explained</h3><span className="muted">Every change of 30% or more</span></div>
+          <ul className="moves">
+            {moves.map((m) => (
+              <li key={m.key}><b>{m.label} {m.change > 0 ? '↑' : '↓'} {pct(Math.abs(m.change))}</b>{m.why ? <span>{m.why}</span> : <em>Reason being checked; we’ll add it here.</em>}</li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section className="section panel" style={{ marginTop: 24 }}>
         <div className="panel-head">

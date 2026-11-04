@@ -1,4 +1,5 @@
 import { noPreview } from '../lib/data'
+import { JOB_LABEL } from '../lib/data'
 import { useEffect, useState } from 'react'
 import type { Content, PlanItem } from '../types'
 import { contentById, planById, DATA, MARKERS } from '../lib/data'
@@ -124,6 +125,8 @@ function ContentSheet({ c, p, mode, onOpen }: { c: Content; p?: PlanItem; mode: 
                     <>
                       <dt>Planned for</dt><dd>{dayLong(p.date)}{p.lag ? ` · live ${p.lag > 0 ? `${p.lag}d late` : `${-p.lag}d early`}` : ''}</dd>
                       <dt>Bucket</dt><dd>{p.bucket}</dd>
+                      <dt>Funnel job</dt><dd>{p.job ? JOB_LABEL[p.job] : <span className="muted">Not tagged</span>}</dd>
+                      <dt>4C</dt><dd>{p.c4 ?? <span className="muted">Not tagged</span>}</dd>
                       <dt>Made by</dt><dd>{p.owner}{p.ownerInferred ? ' (inferred)' : ''}{p.dependency ? ` · ${p.dependency}` : ''}</dd>
                       {p.designer && (<><dt>Designer</dt><dd>{p.designer}</dd></>)}
                       <dt>Boost</dt><dd>{p.boostPlanned ? '💵 planned' : 'not planned'}{c.boosted ? ' · ran' : ''}</dd>
@@ -168,7 +171,7 @@ function PlanSheet({ p, mode, onOpen }: { p: PlanItem; mode: Mode; onOpen: (s: S
             <BoostChip planned={p.boostPlanned} />
           </div>
           <h2>{p.title}</h2>
-          <p className="sheet-meta">{dayLong(p.date)} · {p.platforms} · {p.format} · {p.bucket}</p>
+          <p className="sheet-meta">{dayLong(p.date)} · {p.platforms} · {p.format} · {p.bucket}{p.job ? ` · ${JOB_LABEL[p.job]}` : ''}{p.c4 ? ` · ${p.c4}` : ''}</p>
         </header>
         {why && <div className="verdict-box"><p>{why}</p></div>}
         {rep && <button className="link" onClick={() => onOpen({ kind: 'c', id: rep.id })}>See “{rep.title}” <Icon name="arrow" size={14} /></button>}

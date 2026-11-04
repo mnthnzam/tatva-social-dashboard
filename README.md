@@ -20,7 +20,8 @@ npm run dev        # http://localhost:5173
 **Client view (default, `#/`)** — what Tatva sees. View-only: plan approvals and change requests happen on the call or WhatsApp.
 - **Home** — next month's plan and last month's results as two cards, then the accounts at a glance: Instagram and Facebook followers, net new followers, views, reach, interactions and messages over the last 28 days vs the 28 before, with a by-day chart. Account snapshot from Meta Business Suite (`pipeline/raw/account.json`).
 - **October plan** (`#/plan`) — every planned post week by week with its design (or script for reels), where it stands (design ready / script ready · footage due / topic to be fixed), and the footage Tatva needs to send by when.
-- **Results** (`#/results/<month>`) — four plain numbers vs last month (people reached, reactions & comments, shares & saves, new followers), what worked, what was quieter, plan delivery, and every post with a one-line verdict.
+- **Results** (`#/results/<month>`) — the lead funnel first (people reached → conversations → enquiries → campus visits → admissions, by source, with untagged leads counted openly), then four plain numbers vs last month (people reached, reactions & comments, shares & saves, new followers), what worked, what was quieter, plan delivery, who posted (Zamstars / Tatva team / unconfirmed), paid kept apart from organic, what else happened, and every post with a one-line verdict. A notice shows when the export stopped before the month ended.
+- **Big moves, explained** (Home) — every account change of 30% or more gets a reason line (`why` on the metric in `pipeline/raw/account.json`); until one is entered it says the reason is being checked.
 
 Old links `#/review` and `#/account` still work (they open the plan and home).
 
@@ -53,8 +54,11 @@ pipeline/raw/meta_img/         full post images ({content id}.jpg)
 pipeline/raw/calendar.xlsx     the content calendar sheet
 pipeline/raw/oct_items.json    next month's cleaned plan
 pipeline/raw/canva/            creatives exported from Canva
-pipeline/reconcile.json        manual decisions: plan ↔ post matches, tags, titles
+pipeline/raw/leads.json        hand-entered: funnel by source, paid campaigns, month context, report inputs checklist
+pipeline/reconcile.json        manual decisions: plan ↔ post matches, tags, titles, funnel job (reach / enquiry / visit), 4C
 ```
+
+Pull Meta data on or after the 1st and set `dataCutoff` to the month's last day — `build.py` warns when it doesn't. The report is due on the 3rd working day; the team **Data & review** view shows the inputs checklist and the due date.
 
 ```bash
 cd app

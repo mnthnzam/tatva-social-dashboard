@@ -30,6 +30,23 @@ MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', '
 
 REC = json.load(open(os.path.join(HERE, 'reconcile.json')))
 CUTOFF = dt.date.fromisoformat(REC['dataCutoff'])
+_leads_path = os.path.join(RAW, 'leads.json')
+LEADS = json.load(open(_leads_path)) if os.path.exists(_leads_path) else {'months': {}, 'inputs': None}
+# Monthly value (Project 800 canon). May has none.
+MONTH_VALUES = {1: 'Courteous', 2: 'Helpful', 3: 'Obedient', 4: 'Cooperative', 6: 'Responsible', 7: 'Simple',
+                8: 'Patriotic', 9: 'Respectful', 10: 'Acceptive', 11: 'Patient', 12: 'Honest'}
+FUNNEL_JOBS = ('reach', 'enquiry', 'visit')
+FOUR_CS = ('Cognition', 'Curiosity', 'Compassion', 'Character', 'Contribution')
+
+
+def tags_of(src):
+    """Funnel job and 4C for a plan row, from reconcile.json or the cleaned plan. Unknown values stop the build."""
+    job, c4 = src.get('job'), src.get('c4')
+    if job and job not in FUNNEL_JOBS:
+        raise SystemExit(f"Unknown funnel job {job!r}; use one of {FUNNEL_JOBS}")
+    if c4 and c4 not in FOUR_CS:
+        raise SystemExit(f"Unknown 4C {c4!r}; use one of {FOUR_CS}")
+    return {'job': job or None, 'c4': c4 or None}
 
 METRICS = ['Views', 'Reach', 'Interactions', 'Likes and reactions', 'Comments', 'Shares', 'Saves',
            'Link clicks', 'Follows']
@@ -395,6 +412,7 @@ for month in REPORT_MONTHS:
             'confidence': rec.get('confidence', 'confirmed' if match else None),
             'note': rec.get('note'), 'creative': plan_creative(rec.get('creative')),
             'needsFootage': False, 'footageDue': None, 'dueText': None, 'need': None,
+            **tags_of(rec),
         })
 
 # October: already-cleaned plan items + snapshot boost flags
@@ -422,6 +440,7 @@ for o in json.load(open(os.path.join(RAW, 'oct_items.json'))):
         'creative': plan_creative(os.path.basename(img)) if img else None,
         'needsFootage': bool(o.get('needsFootage')), 'footageDue': o.get('footageDue'),
         'dueText': o.get('dueText'), 'need': o.get('need') if o.get('needsFootage') else None,
+        **tags_of(o),
     })
 
 # --------------------------------------------------------------------------- markers, titles, baselines
@@ -693,12 +712,13 @@ for mnum in REPORT_MONTHS:
     mk = f'{YEAR}-{mnum:02d}'
     summ = month_summary(mk)
     months.append({'id': mk, 'label': MONTH_NAMES[mnum - 1], 'year': YEAR, 'kind': 'report', 'summary': summ,
-                   'insights': insights(mk, summ, prev)})
+                   'insights': insights(mk, summ, prev), 'value': MONTH_VALUES.get(mnum),
+                   'leads': LEADS['months'].get(mk)})
     prev = summ
 for mnum in PLAN_MONTHS:
     mk = f'{YEAR}-{mnum:02d}'
     pl = [p for p in plan if p['month'] == mk]
-    months.append({'id': mk, 'label': MONTH_NAMES[mnum - 1], 'year': YEAR, 'kind': 'plan', 'summary': {
+    months.append({'id': mk, 'label': MONTH_NAMES[mnum - 1], 'year': YEAR, 'kind': 'plan', 'value': MONTH_VALUES.get(mnum), 'summary': {
         'planned': len(pl), 'dated': sum(1 for p in pl if p['date']),
         'designReady': sum(1 for p in pl if (p.get('state') or '').startswith('Design ready')),
         'needsFootage': sum(1 for p in pl if p['needsFootage']),
@@ -721,7 +741,9 @@ data = {
         {'name': 'Meta Business Suite', 'detail': 'Per-post insights, last 90 days, IG + FB, organic/paid split'},
         {'name': 'Content calendar', 'detail': 'Google Sheet: <Month> details + Snapshot tabs'},
         {'name': 'Canva', 'detail': 'TGS monthly design files (creatives, last-minute evidence)'},
+        {'name': 'Leads (pipeline/raw/leads.json)', 'detail': 'Messages, enquiries, visits and admissions by source; paid campaigns; month context. Entered by hand from WATI, the P800 tracker, GA4 and the ads team.'},
     ],
+    'inputs': LEADS.get('inputs'),
     'account': json.load(open(os.path.join(RAW, 'account.json'))),
     'baselines': baselines, 'typical': typical, 'months': months, 'plan': plan, 'content': content, 'stories': stories,
 }
@@ -736,5 +758,10 @@ for m in months:
     if m['kind'] == 'report':
         print(m['label'], 'org', round(s['views_org']), 'ads', round(s['views_ads']), 'follows', s['follows'], 'inter', s['inter_org'],
               'posts', s['posts'], s['markers'], 'delivered', f"{s['delivered']}/{s['due']}", s['status'], 'stories', s['stories'])
+last_rm = REPORT_MONTHS[-1]
+month_end = (dt.date(YEAR, last_rm + 1, 1) if last_rm < 12 else dt.date(YEAR + 1, 1, 1)) - dt.timedelta(days=1)
+if CUTOFF < month_end:
+    print(f"WARNING: dataCutoff {CUTOFF} is before the end of {MONTH_NAMES[last_rm - 1]} ({month_end}); "
+          f"posts from the last {(month_end - CUTOFF).days} days are missing. Re-export on or after the 1st.")
 missing = [c['id'] for c in content if not c['image']]
 print('no image:', len(missing), missing)

@@ -1,5 +1,5 @@
 import raw from '../data/tgs.json'
-import type { Content, Dataset, Marker, PlanItem, PlanStatus, ReportMonth } from '../types'
+import type { Content, Dataset, FunnelJob, Marker, PlanItem, PlanStatus, ReportMonth } from '../types'
 
 export const DATA = raw as unknown as Dataset
 
@@ -29,3 +29,24 @@ export const imageFor = (c: Content | undefined, p?: PlanItem) => c?.image ?? p?
 
 export const noPreview = (c: Content) =>
   c.marker === 'collab' ? 'Partner post — Meta doesn’t share its image' : c.format === 'Reel' ? 'Reel cover is a blank frame' : 'No preview'
+
+export const JOB_LABEL: Record<FunnelJob, string> = { reach: 'Reach', enquiry: 'Enquiry', visit: 'Visit' }
+
+/** Last day of a 'YYYY-MM' month, as 'YYYY-MM-DD'. */
+export const monthEnd = (id: string) => {
+  const [y, m] = id.split('-').map(Number)
+  const d = new Date(y, m, 0)
+  return `${y}-${String(m).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+/** Report for a month is due on the 3rd working day (Mon–Fri) of the next month. */
+export const reportDue = (id: string) => {
+  const [y, m] = id.split('-').map(Number)
+  const d = new Date(y, m, 1)
+  let left = 3
+  for (;;) {
+    if (d.getDay() !== 0 && d.getDay() !== 6 && --left === 0) break
+    d.setDate(d.getDate() + 1)
+  }
+  return d
+}

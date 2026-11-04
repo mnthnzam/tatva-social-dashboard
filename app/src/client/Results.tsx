@@ -9,6 +9,7 @@ import { VerdictChip } from '../components/Badges'
 import { StatTile } from '../components/Charts'
 import { FourUp } from '../components/PostNumbers'
 import { Icon } from '../components/Icon'
+import { FunnelStrip, MonthContext, PaidBlock, PartialNotice, WhoPosted } from './Funnel'
 
 function Feature({ c, open, compact }: { c: Content; open: (s: Selection) => void; compact?: boolean }) {
   return (
@@ -62,14 +63,22 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
   return (
     <>
       <header className="p-head">
-        <span className="eyebrow">{month.label} {month.year} · Results</span>
+        <span className="eyebrow">{month.label} {month.year} · Results{month.value ? ` · Value of the month: ${month.value}` : ''}</span>
         <h1 className="p-title">How {month.label} went</h1>
         <p className="p-sub">
           <strong>{plural(s.posts, 'post')}</strong> on your pages reached <strong>{n(s.plain.reached)} people</strong>, got <strong>{n(s.plain.reactions)} reactions and comments</strong> and were
           shared or saved <strong>{n(s.plain.passedOn)} times</strong>. {s.verdicts.standout > 0 && <>{plural(s.verdicts.standout, 'post')} clearly stood out.</>}
         </p>
+        <PartialNotice month={month} />
       </header>
 
+      <section className="section" style={{ marginTop: 32 }}>
+        <div className="s-head"><h2 className="s-title">From reach to admissions</h2><span className="s-note">What social media fed into Project 800</span></div>
+        <FunnelStrip month={month} />
+      </section>
+
+      <section className="section">
+      <div className="s-head"><h2 className="s-title">How the posts did</h2><span className="s-note">Organic only · vs {prev ? prev.label : 'last month'}</span></div>
       <div className="tiles">
         <StatTile label="People reached" value={n(s.plain.reached)} cur={s.plain.reached} prev={prev?.summary.plain.reached} prevLabel={prev?.label} spark={spark('reached')} onClick={() => open({ kind: 'm', id: `reached|${month.id}` })}
           info="Added up across posts, organic only: someone who saw two posts counts twice."
@@ -79,6 +88,7 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
           info="Parents sending a post on or keeping it — the strongest sign it mattered." />
         <StatTile label="New followers" value={n(s.plain.follows)} cur={s.plain.follows} prev={prev?.summary.plain.follows} prevLabel={prev?.label} spark={spark('follows')} onClick={() => open({ kind: 'm', id: `follows|${month.id}` })} />
       </div>
+      </section>
 
       {best.length > 0 && (
         <section className="section">
@@ -119,6 +129,15 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
             ))}
           </div>
         </div>
+        <div className="panel" style={{ marginTop: 14 }}>
+          <div className="panel-head"><h3>Who posted</h3><span className="muted">Every post on your pages this month</span></div>
+          <WhoPosted month={month} />
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="s-head"><h2 className="s-title">Paid</h2><span className="s-note">Kept apart from the organic numbers above</span></div>
+        <PaidBlock month={month} />
       </section>
 
       <section className="section">
@@ -134,6 +153,13 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
         </div>
         <div className="grid g4">{list.map((c) => <PostCard key={c.id} c={c} open={open} why={false} />)}</div>
       </section>
+
+      {(month.leads?.context?.length ?? 0) > 0 && (
+        <section className="section">
+          <div className="s-head"><h2 className="s-title">What else happened</h2><span className="s-note">Events and changes that explain the numbers</span></div>
+          <MonthContext month={month} />
+        </section>
+      )}
 
       {(collabs.length > 0 || s.stories.count > 0) && (
         <section className="section">

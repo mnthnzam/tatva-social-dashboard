@@ -44,7 +44,32 @@ export interface PlanItem {
   status: PlanStatus; lag: number | null; contentId: string | null; replacedBy: string | null
   confidence: 'confirmed' | 'likely' | null; note: string | null; creative: Img | null
   needsFootage: boolean; footageDue: string | null; dueText: string | null; need: string | null
+  job: FunnelJob | null; c4: FourC | null
 }
+
+export type FunnelJob = 'reach' | 'enquiry' | 'visit'
+export type FourC = 'Cognition' | 'Curiosity' | 'Compassion' | 'Character' | 'Contribution'
+
+/** One stage of the lead funnel. null = not in yet (shown as awaiting, never as zero). */
+export interface FunnelStage {
+  value: number | null
+  basis?: string
+  sources?: Record<string, number | null>
+  untagged?: number | null
+  admissionsRelated?: number | null
+}
+export type FunnelKey = 'conversations' | 'enquiries' | 'visits' | 'admissions'
+export interface PaidCampaign {
+  name: string; platform: string; start: string | null; end: string | null; objective: string | null
+  spend: number | null; reach: number | null; results: number | null; resultType: string | null; note?: string
+}
+export interface MonthLeads {
+  tracked: boolean; trackingNote?: string
+  funnel: Partial<Record<FunnelKey, FunnelStage>>
+  paid: { spend: number | null; campaigns: PaidCampaign[] }
+  context: { date: string | null; text: string; kind?: 'event' | 'holiday' | 'issue' }[]
+}
+export interface InputItem { id: string; label: string; owner: string; status: 'waiting' | 'received' | 'partial' | 'not available'; feeds: string; note?: string }
 
 export interface Insight { kind: string; tone: 'good' | 'warn' | 'neutral'; title: string; body: string; refs: string[] }
 
@@ -66,11 +91,11 @@ export interface PlanSummary {
   linkedin: number; boostPlanned: number; formats: Record<string, number>
 }
 
-export interface ReportMonth { id: string; label: string; year: number; kind: 'report'; summary: ReportSummary; insights: Insight[] }
-export interface PlanMonth { id: string; label: string; year: number; kind: 'plan'; summary: PlanSummary; insights: Insight[] }
+export interface ReportMonth { id: string; label: string; year: number; kind: 'report'; summary: ReportSummary; insights: Insight[]; value?: string | null; leads?: MonthLeads | null }
+export interface PlanMonth { id: string; label: string; year: number; kind: 'plan'; summary: PlanSummary; insights: Insight[]; value?: string | null }
 export type Month = ReportMonth | PlanMonth
 
-export interface AccountMetric { value: number; change: number }
+export interface AccountMetric { value: number; change: number; why?: string }
 export interface AccountPlatform {
   label: string; handle: string; followers: number; followersLabel: string
   metrics: Record<string, AccountMetric>
@@ -95,4 +120,5 @@ export interface Dataset {
   typical: Record<string, Plain & { n: number }>
   months: Month[]; plan: PlanItem[]; content: Content[]
   stories: Record<string, { count: number; views: number }>
+  inputs?: { month: string; items: InputItem[] } | null
 }

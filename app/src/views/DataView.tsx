@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import type { Selection } from '../components/Drawer'
-import { DATA, MARKERS } from '../lib/data'
+import { DATA, MARKERS, reportDue } from '../lib/data'
+import { monthShort } from '../lib/format'
 import { day, n } from '../lib/format'
 import { Creative } from '../components/Creative'
 import { MarkerChip } from '../components/Badges'
@@ -10,8 +11,36 @@ export function DataView({ open }: { open: (s: Selection) => void }) {
   const likely = DATA.plan.filter((p) => p.confidence === 'likely')
   const inferred = DATA.plan.filter((p) => p.ownerInferred)
   const noImg = DATA.content.filter((c) => !c.image)
+  const inputs = DATA.inputs
+  const due = inputs ? reportDue(inputs.month) : null
+  const dueLabel = due?.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const late = due ? due < today : false
+  const done = inputs?.items.filter((i) => i.status === 'received').length ?? 0
+  const STATUS: Record<string, string> = { waiting: 'chip-warn', received: 'chip-good', partial: 'chip-accent', 'not available': 'chip-bad' }
   return (
     <div className="vstack" style={{ gap: 24 }}>
+      {inputs && (
+        <section className="panel">
+          <div className="panel-head">
+            <h3>{monthShort(inputs.month)} report inputs</h3>
+            <div className="due">
+              <span className={`chip ${late ? 'chip-bad' : 'chip-accent'}`}>Due {dueLabel}{late ? ' · overdue' : ''}</span>
+              <span className="muted">{done} of {inputs.items.length} in</span>
+            </div>
+          </div>
+          <ul className="inputs">
+            {inputs.items.map((i) => (
+              <li key={i.id}>
+                <span><span className={`chip ${STATUS[i.status] ?? ''}`}>{i.status === 'waiting' ? 'Waiting' : i.status === 'received' ? 'In' : i.status === 'partial' ? 'Partial' : 'Not available'}</span></span>
+                <span>{i.label}<span className="sub">Feeds: {i.feeds}{i.note ? ` · ${i.note}` : ''}</span></span>
+                <span className="muted">{i.owner}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="fine" style={{ marginTop: 10 }}>Report is due on the 3rd working day of the month. Pull Meta data on or after the 1st so the whole month is in. Update statuses in <code>pipeline/raw/leads.json</code>.</p>
+        </section>
+      )}
       <section className="panel">
         <div className="panel-head"><h3>Needs a tag</h3><span className="muted">Posts outside the calendar with no Zamstars design found. Who made them?</span></div>
         <table className="plist">
@@ -70,11 +99,12 @@ export function DataView({ open }: { open: (s: Selection) => void }) {
         <section className="panel">
           <div className="panel-head"><h3>Monthly update</h3></div>
           <ol style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8, color: "var(--ink-2)", fontSize: 14 }}>
-            <li>Export per-post insights from Meta Business Suite (last 90 days) and grab post previews.</li>
+            <li>On or after the 1st: export per-post insights from Meta Business Suite (last 90 days) and grab post previews. Set <code>dataCutoff</code> to the month’s last day.</li>
             <li>Export the content calendar sheet; add the new month’s creatives from Canva.</li>
             <li>Run <code>npm run data</code> — it matches plan rows to posts and flags anything it can’t match.</li>
-            <li>Resolve flags in <code>reconcile.json</code> (matches, tags, titles) and rerun.</li>
-            <li>Review here, then publish.</li>
+            <li>Resolve flags in <code>reconcile.json</code> (matches, tags, titles, funnel job, 4C) and rerun.</li>
+            <li>Fill <code>raw/leads.json</code>: messages, enquiries, visits, admissions by source; paid campaigns; reasons for big drops; events.</li>
+            <li>Review here, then publish by the 3rd working day.</li>
           </ol>
         </section>
       </div>
