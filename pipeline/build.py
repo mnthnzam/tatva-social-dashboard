@@ -396,7 +396,7 @@ for month in REPORT_MONTHS:
         live_d = dt.datetime.strptime(match['date'], '%Y-%m-%d %H:%M').date() if match else None
         if match:
             lag = (live_d - row['date']).days
-            status = 'On date' if lag == 0 else ('Late' if lag > 0 else 'Early')
+            status = 'On date' if lag == 0 else 'Rescheduled'  # moved either way; lag keeps the days
         elif rec.get('replacedBy'):
             lag, status = None, 'Replaced'
         elif row['date'] > CUTOFF:
@@ -480,7 +480,7 @@ for c in content:
         c['marker'] = un.get('marker', 'unconfirmed')
         c['planId'] = None
         c['title'] = un.get('title') or short_title(c['caption'])
-        c['owner'] = 'Zamstars' if c['marker'] == 'lastminute' else None
+        c['owner'] = {'lastminute': 'Zamstars', 'tatva': 'Tatva'}.get(c['marker'])
     c['format'] = c['format'] or 'Static'
     c['evidence'] = un.get('evidence')
     c['note'] = un.get('note')
@@ -652,13 +652,16 @@ def insights(mk, summ, prev):
     pl = [p for p in plan if p['month'] == mk]
     ow = [c for c in content if c['month'] == mk and c['family'] == 'tgs']
     # 1. delivery
-    late = [p for p in pl if p['status'] == 'Late']
+    late = [p for p in pl if p['status'] == 'Rescheduled']
+    rep = [p for p in pl if p['status'] == 'Replaced']
     miss = [p for p in pl if p['status'] == 'Not posted']
     tat_miss = [p for p in miss if p['dependency'] == 'Footage from Tatva']
     body = f"{summ['delivered']} of {summ['due']} planned posts went live"
     if late:
-        body += f", {len(late)} of them late (by {min(p['lag'] for p in late)}–{max(p['lag'] for p in late)} days)" if len(late) > 1 else f", 1 late by {late[0]['lag']} days"
+        body += f", {len(late)} of them rescheduled" if len(late) > 1 else ", 1 rescheduled"
     body += '.'
+    if rep:
+        body += f" {len(rep)} {'was' if len(rep) == 1 else 'were'} replaced by a more timely post."
     if miss:
         body += f" {len(miss)} didn't go out"
         if tat_miss:
@@ -678,7 +681,10 @@ def insights(mk, summ, prev):
     if unp and summ['views_org']:
         share = sum(c['metrics']['views_org'] for c in unp) / summ['views_org']
         lm = [c for c in unp if c['marker'] == 'lastminute']
+        tv = [c for c in unp if c['marker'] == 'tatva']
         body = f"{len(unp)} post{'s' if len(unp) != 1 else ''} outside the calendar drew {share*100:.0f}% of organic views."
+        if tv:
+            body += f" {len(tv)} {'was' if len(tv) == 1 else 'were'} added by the Tatva team."
         if lm:
             body += f" {len(lm)} {'was a Zamstars last-minute post' if len(lm) == 1 else 'were Zamstars last-minute posts'}."
         out.append({'kind': 'unplanned', 'tone': 'neutral', 'title': 'Outside the plan', 'body': body,

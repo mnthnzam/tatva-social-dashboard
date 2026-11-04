@@ -93,7 +93,7 @@ export function DataView({ open }: { open: (s: Selection) => void }) {
             <dt>Organic views</dt><dd>Views minus the views Meta attributes to ads. IG + FB copies of a post are added together.</dd>
             <dt>Against format</dt><dd>Organic views ÷ the {RANGE} median for that format ({Object.entries(DATA.baselines).map(([k, v]) => `${k} ${n(v.median)}`).join(', ')}).</dd>
             <dt>Verdict</dt><dd>Reach and engagement (reactions, comments, shares, saves) against the {RANGE} median for the format, combined as a geometric mean. Standout ≥ 1.5×, Steady 0.75–1.5×, Quiet &lt; 0.75×. Boosted posts are judged separately.</dd>
-            <dt>Late / Early</dt><dd>Went live on a different day from the calendar date (days shown).</dd>
+            <dt>Rescheduled</dt><dd>Went live on a different day from the calendar date, earlier or later (days shown). Usually because a Tatva post took the slot.</dd>
             {Object.values(MARKERS).map((m) => (<Fragment key={m.label}><dt>{m.label}</dt><dd>{m.hint}</dd></Fragment>))}
           </dl>
         </section>

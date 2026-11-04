@@ -38,7 +38,7 @@ export function PlanView({ month, open }: P) {
       const p = e.p
       const st = month.kind === 'plan' ? stageOf(p).st : STATUS_ST[p.status]
       const live = p.contentId ? contentById.get(p.contentId) : undefined
-      const sub = month.kind === 'plan' ? stageOf(p).label : p.status === 'Late' || p.status === 'Early' ? `${p.status} → ${day(live!.date)}` : p.status
+      const sub = month.kind === 'plan' ? stageOf(p).label : p.status === 'Rescheduled' ? `Rescheduled → ${day(live!.date)}` : p.status
       return (
         <button key={k} className={`cchip ${st}`} onClick={() => open({ kind: 'p', id: p.id })} title={`${p.title} · ${sub}`}>
           <span className="cchip-t">{p.title}</span>
@@ -56,7 +56,7 @@ export function PlanView({ month, open }: P) {
     }
     const c = e.c
     return (
-      <button key={k} className={`cchip ${c.marker === 'lastminute' ? 'st-lm' : 'st-out'}`} onClick={() => open({ kind: 'c', id: c.id })} title={MARKERS[c.marker].hint}>
+      <button key={k} className={`cchip ${c.marker === 'lastminute' ? 'st-lm' : c.marker === 'tatva' ? 'st-tatva' : 'st-out'}`} onClick={() => open({ kind: 'c', id: c.id })} title={MARKERS[c.marker].hint}>
         <span className="cchip-t">{c.title}</span>
         <span className="cchip-s">{MARKERS[c.marker].short}{c.partner ? ` · ${c.partner}` : ''}</span>
       </button>
@@ -75,7 +75,7 @@ export function PlanView({ month, open }: P) {
         {month.kind === 'report' && <label className="check"><input type="checkbox" checked={showCollab} onChange={(e) => setShowCollab(e.target.checked)} /> Collab posts</label>}
         <div className="legend">
           {month.kind === 'report'
-            ? (['On date', 'Late', 'Early', 'Not posted', 'Replaced', 'Upcoming'] as const).map((s) => <span key={s} className={`lg ${STATUS_ST[s]}`}>{s}</span>).concat([<span key="lm" className="lg st-lm">Last-minute</span>, <span key="o" className="lg st-out">Outside plan</span>])
+            ? (['On date', 'Rescheduled', 'Not posted', 'Replaced', 'Upcoming'] as const).map((s) => <span key={s} className={`lg ${STATUS_ST[s]}`}>{s}</span>).concat([<span key="tv" className="lg st-tatva">Added by Tatva</span>, <span key="lm" className="lg st-lm">Last-minute</span>, <span key="o" className="lg st-out">Outside plan</span>])
             : [<span key="a" className="lg st-ok">Design ready</span>, <span key="b" className="lg st-late">Script ready</span>, <span key="c" className="lg st-miss">Needs footage</span>]}
         </div>
       </div>

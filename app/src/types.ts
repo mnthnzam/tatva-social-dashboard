@@ -1,6 +1,6 @@
 export type Format = 'Static' | 'Reel' | 'Carousel'
-export type Marker = 'planned' | 'lastminute' | 'unconfirmed' | 'collab'
-export type PlanStatus = 'On date' | 'Late' | 'Early' | 'Not posted' | 'Replaced' | 'Upcoming' | 'Planned'
+export type Marker = 'planned' | 'tatva' | 'lastminute' | 'unconfirmed' | 'collab'
+export type PlanStatus = 'On date' | 'Rescheduled' | 'Not posted' | 'Replaced' | 'Upcoming' | 'Planned'
 
 export interface Img { src: string; w: number; h: number; from: 'meta' | 'canva' }
 

@@ -18,7 +18,7 @@ export function TeamCard({ c, open }: { c: Content; open: (s: Selection) => void
         <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
           {own && <VerdictChip c={c} />}
           {c.marker !== 'planned' && <MarkerChip marker={c.marker} partner={c.partner} />}
-          {p && (p.status === 'Late' || p.status === 'Early') && <StatusChip status={p.status} lag={p.lag} />}
+          {p && p.status === 'Rescheduled' && <StatusChip status={p.status} lag={p.lag} />}
         </div>
         <span className="pcard-title">{c.title}</span>
         <span className="pcard-date">{day(c.date)} · {c.platforms} · {c.format}</span>
@@ -57,5 +57,5 @@ export function stageOf(p: PlanItem): { label: string; cls: string; st: string }
 }
 
 export const STATUS_ST: Record<string, string> = {
-  'On date': 'st-ok', Early: 'st-early', Late: 'st-late', 'Not posted': 'st-miss', Replaced: 'st-swap', Upcoming: 'st-soon', Planned: 'st-plan',
+  'On date': 'st-ok', Rescheduled: 'st-late', 'Not posted': 'st-miss', Replaced: 'st-swap', Upcoming: 'st-soon', Planned: 'st-plan',
 }

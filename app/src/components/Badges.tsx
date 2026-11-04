@@ -1,5 +1,5 @@
 import type { Content, Marker, PlanStatus, VerdictKey } from '../types'
-import { MARKERS } from '../lib/data'
+import { MARKERS, movedBy } from '../lib/data'
 import { Icon } from './Icon'
 
 const VERDICT: Record<VerdictKey, { cls: string; icon: string; hint: string }> = {
@@ -21,15 +21,15 @@ export function VerdictChip({ c }: { c: Content }) {
 }
 
 export function MarkerChip({ marker, partner }: { marker: Marker; partner?: string }) {
-  const cls = { planned: '', lastminute: 'chip-accent', unconfirmed: 'chip-outline', collab: '' }[marker]
+  const cls = { planned: '', tatva: 'chip-tatva', lastminute: 'chip-accent', unconfirmed: 'chip-outline', collab: '' }[marker]
   return <span className={`chip ${cls}`} title={MARKERS[marker].hint}>{marker === 'collab' && partner ? `Collab · ${partner}` : MARKERS[marker].short}</span>
 }
 
 const STATUS_CLS: Record<PlanStatus, string> = {
-  'On date': 'chip-good', Early: '', Late: 'chip-warn', 'Not posted': 'chip-bad', Replaced: '', Upcoming: '', Planned: '',
+  'On date': 'chip-good', Rescheduled: 'chip-warn', 'Not posted': 'chip-bad', Replaced: '', Upcoming: '', Planned: '',
 }
 export function StatusChip({ status, lag }: { status: PlanStatus; lag?: number | null }) {
-  const extra = status === 'Late' && lag ? ` · ${lag}d` : status === 'Early' && lag ? ` · ${-lag}d` : ''
+  const extra = status === 'Rescheduled' && lag ? ` · ${movedBy(lag)}` : ''
   return <span className={`chip ${STATUS_CLS[status]}`}>{status}{extra}</span>
 }
 

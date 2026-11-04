@@ -10,7 +10,7 @@ import { Icon } from '../components/Icon'
 import { STATUS_ST, TeamCard } from './common'
 
 type P = { month: ReportMonth; open: (s: Selection) => void; go: (r: Partial<Route>) => void }
-const ORDER = ['On date', 'Early', 'Late', 'Replaced', 'Not posted', 'Upcoming'] as const
+const ORDER = ['On date', 'Rescheduled', 'Replaced', 'Not posted', 'Upcoming'] as const
 
 export function Overview({ month, open, go }: P) {
   const s = month.summary

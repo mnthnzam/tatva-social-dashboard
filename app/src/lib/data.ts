@@ -12,15 +12,16 @@ export const reportMonths = DATA.months.filter((m): m is ReportMonth => m.kind =
 
 export const MARKERS: Record<Marker, { label: string; short: string; hint: string }> = {
   planned: { label: 'Planned', short: 'Planned', hint: 'In the content calendar and matched to a live post.' },
+  tatva: { label: 'Added by Tatva', short: 'Added by Tatva', hint: 'Not in the calendar. Posted by the Tatva team (an event, award or impromptu reel).' },
   lastminute: { label: 'Last-minute · Zamstars', short: 'Last-minute', hint: 'Not in the calendar. Designed by Zamstars (found in the month’s Canva file).' },
   unconfirmed: { label: 'Outside plan · unconfirmed', short: 'Unconfirmed', hint: 'Not in the calendar and no Zamstars design found. Likely posted by the Tatva team; needs a tag.' },
   collab: { label: 'Collab', short: 'Collab', hint: 'Posted by a partner account with Tatva as collaborator. Kept out of calendar numbers.' },
 }
 
-export const STATUS_ORDER: PlanStatus[] = ['On date', 'Early', 'Late', 'Replaced', 'Not posted', 'Upcoming', 'Planned']
+export const STATUS_ORDER: PlanStatus[] = ['On date', 'Rescheduled', 'Replaced', 'Not posted', 'Upcoming', 'Planned']
 
 export const statusClass = (s: PlanStatus) =>
-  ({ 'On date': 'ok', Early: 'info', Late: 'late', 'Not posted': 'miss', Replaced: 'swap', Upcoming: 'soon', Planned: 'plan' })[s]
+  ({ 'On date': 'ok', Rescheduled: 'late', 'Not posted': 'miss', Replaced: 'swap', Upcoming: 'soon', Planned: 'plan' })[s]
 
 export const monthContent = (monthId: string) => DATA.content.filter((c) => c.month === monthId)
 export const monthPlan = (monthId: string) => DATA.plan.filter((p) => p.month === monthId)
@@ -52,3 +53,7 @@ export const reportDue = (id: string) => {
   }
   return d
 }
+
+/** 'Rescheduled · 3 days later' / '· 5 days earlier'. */
+export const movedBy = (lag: number | null | undefined) =>
+  !lag ? '' : `${Math.abs(lag)} day${Math.abs(lag) === 1 ? '' : 's'} ${lag > 0 ? 'later' : 'earlier'}`

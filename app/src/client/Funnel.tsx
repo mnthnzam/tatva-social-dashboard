@@ -55,7 +55,7 @@ export function WhoPosted({ month }: { month: ReportMonth }) {
   const cs = monthContent(month.id)
   const groups = [
     { key: 'Zamstars', color: 'var(--org)', items: cs.filter((c) => (c.marker === 'planned' && c.planId && planById.get(c.planId)?.owner === 'Zamstars') || c.marker === 'lastminute') },
-    { key: 'Tatva team', color: 'var(--brand)', items: cs.filter((c) => c.marker === 'planned' && c.planId && planById.get(c.planId)?.owner === 'Tatva') },
+    { key: 'Tatva team', color: 'var(--brand)', items: cs.filter((c) => (c.marker === 'planned' && c.planId && planById.get(c.planId)?.owner === 'Tatva') || c.marker === 'tatva') },
     { key: 'Not yet confirmed', color: 'var(--mute-mark)', items: cs.filter((c) => c.marker === 'unconfirmed') },
   ].filter((g) => g.items.length > 0)
   const collabs = cs.filter((c) => c.marker === 'collab').length

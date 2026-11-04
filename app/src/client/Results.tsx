@@ -1,12 +1,12 @@
 import { RANGE } from '../lib/data'
 import { noPreview } from '../lib/data'
 import { useMemo, useState } from 'react'
-import type { Content, ReportMonth, VerdictKey } from '../types'
+import type { Content, PlanItem, ReportMonth, VerdictKey } from '../types'
 import type { Selection } from '../components/Drawer'
-import { monthContent, monthPlan, reportMonths } from '../lib/data'
+import { contentById, monthContent, monthPlan, movedBy, reportMonths, statusClass } from '../lib/data'
 import { day, n, plural } from '../lib/format'
 import { Creative } from '../components/Creative'
-import { VerdictChip } from '../components/Badges'
+import { MarkerChip, VerdictChip } from '../components/Badges'
 import { StatTile } from '../components/Charts'
 import { FourUp } from '../components/PostNumbers'
 import { Icon } from '../components/Icon'
@@ -57,7 +57,20 @@ export function Results({ month, open, go }: { month: ReportMonth; open: (s: Sel
   const quiet = [...ranked].reverse().filter((c) => c.verdict!.key === 'quiet').slice(0, 2)
   const pl = monthPlan(month.id)
   const missed = pl.filter((p) => p.status === 'Not posted' || p.status === 'Replaced')
-  const footageMissed = missed.filter((p) => p.dependency === 'Footage from Tatva').length
+  const footageMissed = missed.filter((p) => p.status === 'Not posted' && p.dependency === 'Footage from Tatva').length
+  // Planned rows and posts added outside the calendar, in one list by date.
+  const timeline = [
+    ...pl.map((p) => ({ kind: 'plan' as const, p, d: p.date ?? '9999' })),
+    ...own.filter((c) => c.marker !== 'planned').map((c) => ({ kind: 'added' as const, c, d: c.date.slice(0, 10) })),
+  ].sort((a, b) => a.d.localeCompare(b.d))
+  const planLine = (p: PlanItem) => {
+    const live = p.contentId ? contentById.get(p.contentId) : undefined
+    if (p.status === 'On date') return 'Went out on the day'
+    if (p.status === 'Rescheduled' && live) return `Rescheduled · went out ${day(live.date)} (${movedBy(p.lag)})`
+    if (p.status === 'Replaced') { const r = p.replacedBy ? contentById.get(p.replacedBy) : undefined; return r ? `Replaced by “${r.title}”` : 'Slot used for a more timely post' }
+    if (p.status === 'Not posted') return p.dependency === 'Footage from Tatva' ? 'Not posted · waiting on footage' : 'Not posted'
+    return p.status
+  }
   const list = useMemo(() => own.filter((c) => filter === 'all' || c.verdict?.key === filter).sort((a, b) => b.date.localeCompare(a.date)), [own, filter])
   const spark = (k: 'reached' | 'reactions' | 'passedOn' | 'follows') => upto.map((m) => ({ label: m.label, value: m.summary.plain[k] }))
 
@@ -127,16 +140,28 @@ export function Results({ month, open, go }: { month: ReportMonth; open: (s: Sel
               {Array.from({ length: s.due }, (_, i) => <span key={i} style={{ flex: 1, background: i < s.delivered ? 'var(--good)' : 'var(--mute-mark)' }} />)}
             </div>
             {footageMissed > 0 && <p className="fine">{plural(footageMissed, 'reel')} couldn’t go out because the footage from the Tatva team didn’t come in.</p>}
+            {(s.markers.tatva ?? 0) > 0 && <p className="fine" style={{ marginTop: 6 }}>Plus {plural(s.markers.tatva ?? 0, 'post')} added by the Tatva team (events, awards, impromptu reels).</p>}
             {(s.markers.lastminute ?? 0) + (s.markers.unconfirmed ?? 0) > 0 && (
-              <p className="fine" style={{ marginTop: 6 }}>{plural((s.markers.lastminute ?? 0) + (s.markers.unconfirmed ?? 0), 'extra post')} went out that weren’t in the plan (awards, events, news).</p>
+              <p className="fine" style={{ marginTop: 6 }}>Plus {plural((s.markers.lastminute ?? 0) + (s.markers.unconfirmed ?? 0), 'last-minute post')} from Zamstars.</p>
             )}
           </div>
-          <div className="dl-list">
-            {missed.length === 0 && <p className="muted">Everything planned went out.</p>}
-            {missed.map((p) => (
-              <button key={p.id} className="dl-item" onClick={() => open({ kind: 'p', id: p.id })}>
-                <span className="dl-date">{day(p.date)}</span>
-                <span><span className="dl-t">{p.title}</span><br /><span className="dl-s">{p.status === 'Replaced' ? 'Slot used for a more timely post' : p.dependency === 'Footage from Tatva' ? 'Waiting on footage' : 'Not posted'}</span></span>
+          <div className="dl-list plan-list">
+            {timeline.map((e) => e.kind === 'plan' ? (
+              <button key={e.p.id} className="dl-item" onClick={() => open(e.p.contentId ? { kind: 'c', id: e.p.contentId } : { kind: 'p', id: e.p.id })}>
+                <span className="dl-date">{day(e.p.date)}</span>
+                <span>
+                  <span className="dl-t">{e.p.title}</span><br />
+                  <span className={`dl-s st-${statusClass(e.p.status)}`}>{planLine(e.p)}</span>
+                </span>
+                <Icon name="arrow" size={16} />
+              </button>
+            ) : (
+              <button key={e.c.id} className="dl-item added" onClick={() => open({ kind: 'c', id: e.c.id })}>
+                <span className="dl-date">{day(e.c.date)}</span>
+                <span>
+                  <span className="dl-t">{e.c.title}</span><br />
+                  <span className="dl-s"><MarkerChip marker={e.c.marker} /> <span style={{ marginLeft: 4 }}>Not in the calendar · {e.c.format}</span></span>
+                </span>
                 <Icon name="arrow" size={16} />
               </button>
             ))}

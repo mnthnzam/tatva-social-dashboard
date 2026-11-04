@@ -12,7 +12,7 @@ type Sort = 'date' | 'views' | 'index' | 'shares'
 
 export function Posts({ month, open }: P) {
   const [scope, setScope] = useState<'month' | 'all'>(month.kind === 'plan' ? 'all' : 'month')
-  const [markers, setMarkers] = useState<Set<Marker>>(new Set(['planned', 'lastminute', 'unconfirmed']))
+  const [markers, setMarkers] = useState<Set<Marker>>(new Set(['planned', 'tatva', 'lastminute', 'unconfirmed']))
   const [fmt, setFmt] = useState<Format | 'all'>('all')
   const [boostOnly, setBoostOnly] = useState(false)
   const [sort, setSort] = useState<Sort>('date')
