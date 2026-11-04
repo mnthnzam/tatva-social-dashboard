@@ -567,3 +567,13 @@ textarea, input, select { font: inherit; color: var(--ink); }
   .fn-stage:first-child { grid-column: 1 / -1; border-top: 0; }
   .fn-v { font-size: 24px; }
 }
+.paid-h { font-size: 13px; font-weight: 700; color: var(--ink-2); margin: 4px 0 2px; text-transform: uppercase; letter-spacing: 0.04em; }
+.web-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.web-list li { display: grid; grid-template-columns: 170px minmax(0, 1fr) 64px 92px; gap: 12px; align-items: center; font-size: 13.5px; color: var(--ink-2); }
+.web-list li.hl { color: var(--ink); font-weight: 600; }
+.web-bar { height: 8px; background: var(--sunken); border-radius: 4px; overflow: hidden; }
+.web-bar i { display: block; height: 100%; background: var(--mute-mark); border-radius: 4px; }
+.web-list li.hl .web-bar i { background: var(--org); }
+.web-list b { text-align: right; font-variant-numeric: tabular-nums; }
+.web-list em { font-style: normal; font-size: 12.5px; color: var(--ink-3); }
+@media (max-width: 860px) { .web-list li { grid-template-columns: 120px minmax(0, 1fr) 52px; } .web-list em { display: none; } }

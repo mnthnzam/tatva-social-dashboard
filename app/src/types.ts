@@ -62,11 +62,14 @@ export type FunnelKey = 'conversations' | 'enquiries' | 'visits' | 'admissions'
 export interface PaidCampaign {
   name: string; platform: string; start: string | null; end: string | null; objective: string | null
   spend: number | null; reach: number | null; results: number | null; resultType: string | null; note?: string
+  status?: string; impressions?: number | null; clicks?: number | null
 }
+export interface WebChannel { name: string; sessions: number; engaged: number }
 export interface MonthLeads {
   tracked: boolean; trackingNote?: string
   funnel: Partial<Record<FunnelKey, FunnelStage>>
-  paid: { spend: number | null; campaigns: PaidCampaign[] }
+  paid: { spend: number | null; spendBy?: Record<string, number>; campaigns: PaidCampaign[] }
+  web?: { basis: string; excluded: number; channels: WebChannel[]; keyEvents: number | null } | null
   context: { date: string | null; text: string; kind?: 'event' | 'holiday' | 'issue' }[]
 }
 export interface InputItem { id: string; label: string; owner: string; status: 'waiting' | 'received' | 'partial' | 'not available'; feeds: string; note?: string }

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-04 11:27",
+ "generatedAt": "2026-11-04 11:36",
  "dataCutoff": "2026-10-31",
  "rangeLabel": "Jul–Oct",
  "brand": {
@@ -94,9 +94,9 @@
     "id": "paid",
     "label": "Paid Meta: spend, reach, results and cost per result by campaign; Lead Gen leads by ad set",
     "owner": "Vinod / Ranjith",
-    "status": "partial",
+    "status": "received",
     "feeds": "Paid section, enquiries",
-    "note": "Lead count (533) in from Leads Centre; spend needs the ad account."
+    "note": "Meta and Google Ads exports in (4 Nov)."
    },
    {
     "id": "wati",
@@ -116,8 +116,9 @@
     "id": "ga4",
     "label": "GA4: sessions and form submissions from Instagram / Facebook",
     "owner": "Ranjith",
-    "status": "waiting",
-    "feeds": "Enquiries"
+    "status": "partial",
+    "feeds": "Enquiries",
+    "note": "Sessions by channel in; key events (form, call, WhatsApp) not in the export."
    },
    {
     "id": "context",
@@ -1094,12 +1095,13 @@
       "admissionsRelated": null
      },
      "enquiries": {
-      "value": 533,
-      "basis": "Meta lead-form leads in Leads Centre, 1–31 Oct. Tracker leads from other sources not in yet.",
+      "value": 468,
+      "basis": "Meta admissions leads, 1–31 Oct: lead forms (397) and website leads tracked by the Meta pixel (71). Google Ads conversions (631) are left out until their conversion action is confirmed. Diwali workshop registrations (78) are event sign-ups, not enquiries.",
       "sources": {
-       "Meta lead forms": 533,
-       "Instagram / Facebook organic": null,
-       "Website from social": null
+       "Meta lead forms": 397,
+       "Meta website leads (pixel)": 71,
+       "Google Ads": null,
+       "Instagram / Facebook organic": null
       },
       "untagged": null
      },
@@ -1121,31 +1123,116 @@
      }
     },
     "paid": {
-     "spend": null,
+     "spend": 142306.76,
+     "spendBy": {
+      "Meta": 60723.76,
+      "Google": 81583.0
+     },
      "campaigns": [
       {
-       "name": "Lead ads (instant forms)",
-       "platform": "Instagram + Facebook",
-       "start": "2026-10-09",
-       "end": "2026-10-26",
+       "name": "Lead Generation · Admissions",
+       "platform": "Meta",
+       "status": "Active",
+       "start": "2026-10-01",
+       "end": "2026-10-31",
        "objective": "Leads",
-       "spend": null,
-       "reach": null,
-       "results": 533,
+       "spend": 45484.65,
+       "impressions": 495811,
+       "reach": 237572,
+       "clicks": 8751,
+       "results": 441,
        "resultType": "leads",
-       "note": "Run from an ad account this login can't see, so spend and cost per lead are with the ads team. Two bursts, 9–13 Oct and 22–26 Oct; 926.5K of 946.3K Instagram views came from ads."
+       "note": "397 form leads plus 44 website leads from the 27–28 Oct grade-band ad sets. The grade-band ad sets cost ₹381–₹503 a lead; the main reel ad cost ₹64."
       },
       {
-       "name": "Boost: The Alumni Echo",
-       "platform": "Facebook",
-       "start": "2026-10-13",
-       "end": null,
-       "objective": null,
-       "spend": null,
-       "reach": 126841,
-       "results": null,
-       "resultType": null,
-       "note": "181.2K of the reel's 183.7K Facebook views came from the boost."
+       "name": "Engagement · Organic posts",
+       "platform": "Meta",
+       "status": "Paused",
+       "start": "2026-10-01",
+       "end": "2026-10-31",
+       "objective": "Engagement",
+       "spend": 5949.67,
+       "impressions": 481126,
+       "reach": 342622,
+       "clicks": 6843,
+       "results": 6541,
+       "resultType": "profile and Page visits",
+       "note": "Boosts of organic posts. No lead objective."
+      },
+      {
+       "name": "Retargeting · Admissions",
+       "platform": "Meta",
+       "status": "Active",
+       "start": "2026-10-01",
+       "end": "2026-10-31",
+       "objective": "Leads",
+       "spend": 4566.21,
+       "impressions": 21469,
+       "reach": 9253,
+       "clicks": 383,
+       "results": 27,
+       "resultType": "leads",
+       "note": "Admission-page visitors and people who opened the form. ₹147–₹201 a lead."
+      },
+      {
+       "name": "Website Traffic · Admissions",
+       "platform": "Meta",
+       "status": "Paused",
+       "start": "2026-10-01",
+       "end": "2026-10-31",
+       "objective": "Traffic",
+       "spend": 2733.25,
+       "impressions": 193189,
+       "reach": 133247,
+       "clicks": 643,
+       "results": 392,
+       "resultType": "link clicks",
+       "note": "Ad set was set to optimise for post engagement, not link clicks; CTR 0.33%. Includes the Alumni NIFT reel and Principal boosts."
+      },
+      {
+       "name": "Diwali Diya Workshop · Registrations",
+       "platform": "Meta",
+       "status": "Paused",
+       "start": "2026-10-01",
+       "end": "2026-10-31",
+       "objective": "Leads",
+       "spend": 1989.98,
+       "impressions": 17434,
+       "reach": 9971,
+       "clicks": 455,
+       "results": 78,
+       "resultType": "registrations",
+       "note": "Event registrations for the November workshop, not admissions enquiries."
+      },
+      {
+       "name": "PMax · Admissions 2027-28",
+       "platform": "Google",
+       "status": "Active",
+       "start": "2026-10-01",
+       "end": "2026-10-31",
+       "objective": "Performance Max",
+       "spend": 64065.56,
+       "impressions": 163938,
+       "reach": null,
+       "clicks": 8483,
+       "results": 489,
+       "resultType": "conversions",
+       "note": "₹1,500/day. Conversion action not confirmed."
+      },
+      {
+       "name": "PMax 27-28",
+       "platform": "Google",
+       "status": "Active",
+       "start": "2026-10-01",
+       "end": "2026-10-31",
+       "objective": "Performance Max",
+       "spend": 17517.44,
+       "impressions": 13021,
+       "reach": null,
+       "clicks": 1142,
+       "results": 141,
+       "resultType": "conversions",
+       "note": "₹1,200/day. Conversion action not confirmed."
       }
      ]
     },
@@ -1177,10 +1264,87 @@
      },
      {
       "date": null,
-      "text": "None of the 533 Leads Centre leads is marked converted, qualified or lost, so Meta can't show a conversion rate.",
+      "text": "Leads Centre shows 533 October leads; the ads report shows 397 form leads, 71 pixel leads and 78 workshop registrations (546). The two don't reconcile yet, and none of the 533 is marked converted, qualified or lost.",
       "kind": "issue"
+     },
+     {
+      "date": "2026-10-27",
+      "text": "Grade-band lead ads (Grades 3–5, Nursery–PP2) ran 27–28 Oct: ₹19,799 for 44 leads.",
+      "kind": "event"
      }
-    ]
+    ],
+    "web": {
+     "basis": "Google Analytics 4, sessions by channel. Export has no date range on it; read as 1–31 Oct. Test and spam traffic removed.",
+     "excluded": 115,
+     "channels": [
+      {
+       "name": "Organic Search",
+       "sessions": 2204,
+       "engaged": 1441
+      },
+      {
+       "name": "Direct",
+       "sessions": 1680,
+       "engaged": 436
+      },
+      {
+       "name": "Cross-network",
+       "sessions": 1497,
+       "engaged": 929
+      },
+      {
+       "name": "Organic Social",
+       "sessions": 454,
+       "engaged": 210
+      },
+      {
+       "name": "Paid Social",
+       "sessions": 239,
+       "engaged": 81
+      },
+      {
+       "name": "Referral",
+       "sessions": 101,
+       "engaged": 76
+      },
+      {
+       "name": "AI Assistant",
+       "sessions": 26,
+       "engaged": 16
+      },
+      {
+       "name": "Print and outdoor QR",
+       "sessions": 21,
+       "engaged": 2
+      },
+      {
+       "name": "Paid Search",
+       "sessions": 20,
+       "engaged": 2
+      },
+      {
+       "name": "Paid Other",
+       "sessions": 8,
+       "engaged": 6
+      },
+      {
+       "name": "Unassigned",
+       "sessions": 7,
+       "engaged": 0
+      },
+      {
+       "name": "Organic Video",
+       "sessions": 3,
+       "engaged": 1
+      },
+      {
+       "name": "Display",
+       "sessions": 1,
+       "engaged": 0
+      }
+     ],
+     "keyEvents": null
+    }
    }
   }
  ],

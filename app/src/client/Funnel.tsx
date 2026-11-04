@@ -76,38 +76,73 @@ export function WhoPosted({ month }: { month: ReportMonth }) {
 }
 
 /** Paid is reported apart from organic, so a paused ad never reads as an organic drop. */
+const inr = (x: number) => `₹${x >= 100000 ? (x / 100000).toFixed(2).replace(/\.?0+$/, '') + 'L' : x >= 1000 ? (x / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : Math.round(x)}`
+
 export function PaidBlock({ month }: { month: ReportMonth }) {
   const s = month.summary
-  const camps = month.leads?.paid.campaigns ?? []
-  const spend = month.leads?.paid.spend ?? null
+  const P = month.leads?.paid
+  const camps = P?.campaigns ?? []
   if (camps.length === 0 && s.boosted === 0) return <p className="muted">No paid boosts or ads ran this month.</p>
+  const spend = P?.spend ?? null
+  const leadCamps = camps.filter((c) => c.platform === 'Meta' && c.resultType === 'leads')
+  const metaLeads = leadCamps.reduce((a, c) => a + (c.results ?? 0), 0)
+  const metaLeadSpend = leadCamps.reduce((a, c) => a + (c.spend ?? 0), 0)
+  const platforms = [...new Set(camps.map((c) => c.platform))]
   return (
     <div className="paid">
       <div className="paid-sum">
-        <div><strong>{s.boosted}</strong><span>boosted {s.boosted === 1 ? 'post' : 'posts'}</span></div>
-        <div><strong>{n(s.boostReach)}</strong><span>extra reach from boosts</span></div>
-        <div><strong>{camps.length}</strong><span>separate {camps.length === 1 ? 'ad' : 'ads'}</span></div>
-        <div><strong>{spend === null ? '—' : `₹${n(spend)}`}</strong><span>{spend === null ? 'spend not in yet' : 'spend'}</span></div>
+        <div><strong>{spend === null ? '—' : inr(spend)}</strong><span>{spend === null ? 'spend not in yet' : `spent${P?.spendBy ? ` · ${Object.entries(P.spendBy).map(([k, v]) => `${k} ${inr(v)}`).join(', ')}` : ''}`}</span></div>
+        <div><strong>{metaLeads ? n(metaLeads) : '—'}</strong><span>admissions leads from Meta ads</span></div>
+        <div><strong>{metaLeads ? `₹${Math.round(metaLeadSpend / metaLeads)}` : '—'}</strong><span>per Meta lead</span></div>
+        <div><strong>{n(s.boostReach)}</strong><span>extra reach on boosted posts</span></div>
       </div>
-      {camps.length > 0 && (
-        <ul className="paid-list">
-          {camps.map((c) => (
-            <li key={c.name}>
-              <div>
-                <span className="dl-t">{c.name}</span>
-                <span className="dl-s"> · {c.platform}{c.start ? ` · ${day(c.start)}${c.end ? `–${day(c.end)}` : ''}` : ''}</span>
-                {c.note && <p className="fine" style={{ marginTop: 2 }}>{c.note}</p>}
-              </div>
-              <div className="paid-n">
-                <span><b>{c.reach === null ? '—' : n(c.reach)}</b> reach</span>
-                <span><b>{c.results === null ? '—' : n(c.results)}</b> {c.resultType ?? 'results'}</span>
-                <span><b>{c.spend === null || !c.results ? '—' : `₹${n(c.spend / c.results)}`}</b> per result</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-      <p className="fine">Reach and engagement in the rest of this page are organic only.</p>
+      {platforms.map((pl) => (
+        <div key={pl}>
+          <h4 className="paid-h">{pl}</h4>
+          <ul className="paid-list">
+            {camps.filter((c) => c.platform === pl).sort((a, b) => (b.spend ?? 0) - (a.spend ?? 0)).map((c) => (
+              <li key={c.name}>
+                <div>
+                  <span className="dl-t">{c.name}</span>
+                  {c.status && <span className="dl-s"> · {c.status}</span>}
+                  {c.note && <p className="fine" style={{ marginTop: 2 }}>{c.note}</p>}
+                </div>
+                <div className="paid-n">
+                  <span><b>{c.spend === null ? '—' : inr(c.spend)}</b> spent</span>
+                  <span><b>{c.results === null ? '—' : n(c.results)}</b> {c.resultType ?? 'results'}</span>
+                  <span><b>{c.spend === null || !c.results ? '—' : `₹${c.spend / c.results < 10 ? (c.spend / c.results).toFixed(2) : Math.round(c.spend / c.results)}`}</b> each</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <p className="fine">Reach and engagement elsewhere on this page are organic only. Results are counted the way each platform reports them, so leads, visits and clicks are not added together.</p>
+    </div>
+  )
+}
+
+/** Where website sessions came from (GA4). Social channels are highlighted. */
+export function WebBlock({ month }: { month: ReportMonth }) {
+  const W = month.leads?.web
+  if (!W) return null
+  const total = W.channels.reduce((a, c) => a + c.sessions, 0)
+  const max = Math.max(...W.channels.map((c) => c.sessions))
+  const social = (k: string) => /Social/.test(k)
+  return (
+    <div className="panel">
+      <div className="panel-head"><h3>Website visits by channel</h3><span className="muted">{n(total)} sessions</span></div>
+      <ul className="web-list">
+        {W.channels.map((c) => (
+          <li key={c.name} className={social(c.name) ? 'hl' : ''}>
+            <span>{c.name}</span>
+            <span className="web-bar"><i style={{ width: `${(c.sessions / max) * 100}%` }} /></span>
+            <b>{n(c.sessions)}</b>
+            <em>{c.sessions ? pct(c.engaged / c.sessions) : '—'} engaged</em>
+          </li>
+        ))}
+      </ul>
+      <p className="fine" style={{ marginTop: 10 }}>{W.basis}{W.excluded ? ` ${n(W.excluded)} sessions removed.` : ''} Form submissions by channel aren’t in this export yet.</p>
     </div>
   )
 }

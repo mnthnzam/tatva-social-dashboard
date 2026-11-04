@@ -10,7 +10,7 @@ import { VerdictChip } from '../components/Badges'
 import { StatTile } from '../components/Charts'
 import { FourUp } from '../components/PostNumbers'
 import { Icon } from '../components/Icon'
-import { FunnelStrip, MonthContext, PaidBlock, PartialNotice, WhoPosted } from './Funnel'
+import { FunnelStrip, MonthContext, PaidBlock, PartialNotice, WebBlock, WhoPosted } from './Funnel'
 
 function Feature({ c, open, compact }: { c: Content; open: (s: Selection) => void; compact?: boolean }) {
   return (
@@ -137,8 +137,9 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
       </section>
 
       <section className="section">
-        <div className="s-head"><h2 className="s-title">Paid</h2><span className="s-note">Kept apart from the organic numbers above</span></div>
+        <div className="s-head"><h2 className="s-title">Paid and website</h2><span className="s-note">Kept apart from the organic numbers above</span></div>
         <PaidBlock month={month} />
+        {month.leads?.web && <div style={{ marginTop: 14 }}><WebBlock month={month} /></div>}
       </section>
 
       <section className="section">
