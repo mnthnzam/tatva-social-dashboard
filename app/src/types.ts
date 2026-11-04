@@ -70,6 +70,7 @@ export interface MonthLeads {
   funnel: Partial<Record<FunnelKey, FunnelStage>>
   paid: { spend: number | null; spendBy?: Record<string, number>; campaigns: PaidCampaign[] }
   web?: { basis: string; excluded: number; channels: WebChannel[]; keyEvents: number | null } | null
+  brief?: Brief | null
   context: { date: string | null; text: string; kind?: 'event' | 'holiday' | 'issue' }[]
 }
 export interface InputItem { id: string; label: string; owner: string; status: 'waiting' | 'received' | 'partial' | 'not available'; feeds: string; note?: string }
@@ -124,4 +125,13 @@ export interface Dataset {
   months: Month[]; plan: PlanItem[]; content: Content[]
   stories: Record<string, { count: number; views: number }>
   inputs?: { month: string; items: InputItem[] } | null
+}
+
+export interface BriefItem { title: string; stat: string; body: string; ref: string | null }
+export interface Brief {
+  headline: string
+  money: { label: string; campaigns: string[]; outcome: string; per: string | null; verdict: 'working' | 'check' | 'not'; note: string }[]
+  working: BriefItem[]
+  notWorking: BriefItem[]
+  decisions: { text: string; owner: string }[]
 }
