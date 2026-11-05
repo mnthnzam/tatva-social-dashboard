@@ -12,7 +12,7 @@ export const reportMonths = DATA.months.filter((m): m is ReportMonth => m.kind =
 
 export const MARKERS: Record<Marker, { label: string; short: string; hint: string }> = {
   planned: { label: 'Planned', short: 'Planned', hint: 'In the content calendar and matched to a live post.' },
-  tatva: { label: 'Added by Tatva', short: 'Added by Tatva', hint: 'Not in the calendar. Posted by the Tatva team (an event, award or impromptu reel).' },
+  tatva: { label: 'Added during the month', short: 'Added in month', hint: 'Not in the calendar. Added during the month for an event, award or campus moment; reels shot and edited by the Tatva team, published by Zamstars.' },
   lastminute: { label: 'Last-minute · Zamstars', short: 'Last-minute', hint: 'Not in the calendar. Designed by Zamstars (found in the month’s Canva file).' },
   unconfirmed: { label: 'Outside plan · unconfirmed', short: 'Unconfirmed', hint: 'Not in the calendar and no Zamstars design found. Likely posted by the Tatva team; needs a tag.' },
   collab: { label: 'Collab', short: 'Collab', hint: 'Posted by a partner account with Tatva as collaborator. Kept out of calendar numbers.' },

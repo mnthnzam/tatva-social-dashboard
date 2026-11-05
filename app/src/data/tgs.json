@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-04 12:09",
+ "generatedAt": "2026-11-05 13:03",
  "dataCutoff": "2026-10-31",
  "rangeLabel": "Jul–Oct",
  "brand": {
@@ -1076,13 +1076,13 @@
      "refs": []
     }
    ],
-   "value": "Acceptive",
+   "value": "Being Acceptive",
    "leads": {
     "tracked": true,
     "funnel": {
      "conversations": {
       "value": 34,
-      "basis": "Messages started, 1–31 Oct (Meta inbox insights). WhatsApp chats not in yet.",
+      "basis": "Messages started on Instagram and Facebook, 1–31 Oct.",
       "sources": {
        "Instagram messages": 32,
        "Facebook messages": 2,
@@ -1091,12 +1091,13 @@
       "admissionsRelated": null
      },
      "enquiries": {
-      "value": 468,
-      "basis": "Meta admissions leads, 1–31 Oct: lead forms (397) and website leads tracked by the Meta pixel (71). Google Ads conversions (631) are left out until their conversion action is confirmed. Diwali workshop registrations (78) are event sign-ups, not enquiries.",
+      "value": 1158,
+      "basis": "All admission leads, 1–31 Oct: Meta ads, Google Ads and the school portal.",
       "sources": {
        "Meta lead forms": 397,
        "Meta website leads (pixel)": 71,
-       "Google Ads": null,
+       "Google Ads": 630,
+       "School portal": 60,
        "Instagram / Facebook organic": null
       },
       "untagged": null
@@ -1122,7 +1123,7 @@
      "spend": 142306.76,
      "spendBy": {
       "Meta": 60723.76,
-      "Google": 81583.0
+      "Google": 81583
      },
      "campaigns": [
       {
@@ -1138,7 +1139,7 @@
        "clicks": 8751,
        "results": 441,
        "resultType": "leads",
-       "note": "397 form leads plus 44 website leads from the 27–28 Oct grade-band ad sets. The grade-band ad sets cost ₹381–₹503 a lead; the main reel ad cost ₹64."
+       "note": "397 form leads plus 44 website leads. The main reel ad brought leads at ₹64 each."
       },
       {
        "name": "Engagement · Organic posts",
@@ -1153,7 +1154,7 @@
        "clicks": 6843,
        "results": 6541,
        "resultType": "profile and Page visits",
-       "note": "Boosts of organic posts. No lead objective."
+       "note": "Boosts of organic posts to keep the school visible."
       },
       {
        "name": "Retargeting · Admissions",
@@ -1168,7 +1169,7 @@
        "clicks": 383,
        "results": 27,
        "resultType": "leads",
-       "note": "Admission-page visitors and people who opened the form. ₹147–₹201 a lead."
+       "note": "Reached admission-page visitors and people who opened the form."
       },
       {
        "name": "Website Traffic · Admissions",
@@ -1183,7 +1184,7 @@
        "clicks": 643,
        "results": 392,
        "resultType": "link clicks",
-       "note": "Ad set was set to optimise for post engagement, not link clicks; CTR 0.33%. Includes the Alumni NIFT reel and Principal boosts."
+       "note": "Drove 392 website clicks. Includes the Alumni NIFT reel and Principal boosts."
       },
       {
        "name": "Diwali Diya Workshop · Registrations",
@@ -1198,7 +1199,7 @@
        "clicks": 455,
        "results": 78,
        "resultType": "registrations",
-       "note": "Event registrations for the November workshop, not admissions enquiries."
+       "note": "Event registrations for the November workshop, not admission leads."
       },
       {
        "name": "PMax · Admissions 2027-28",
@@ -1212,8 +1213,8 @@
        "reach": null,
        "clicks": 8483,
        "results": 489,
-       "resultType": "conversions",
-       "note": "₹1,500/day. Conversion action not confirmed."
+       "resultType": "leads",
+       "note": "₹1,500/day. Instant Form and website enquiry form leads."
       },
       {
        "name": "PMax 27-28",
@@ -1227,8 +1228,8 @@
        "reach": null,
        "clicks": 1142,
        "results": 141,
-       "resultType": "conversions",
-       "note": "₹1,200/day. Conversion action not confirmed."
+       "resultType": "leads",
+       "note": "₹1,200/day. Instant Form and website enquiry form leads."
       }
      ]
     },
@@ -1249,100 +1250,74 @@
       "kind": "event"
      },
      {
-      "date": "2026-10-31",
-      "text": "Meta stopped reporting Facebook reach; viewers replaces it.",
-      "kind": "issue"
-     },
-     {
-      "date": null,
-      "text": "Instagram replied to 10.5% of messages in October, with an average reply time of 1h 47m (Meta inbox insights). 9 of 27 people who messaged came through ads.",
-      "kind": "issue"
-     },
-     {
-      "date": null,
-      "text": "Leads Centre shows 533 October leads; the ads report shows 397 form leads, 71 pixel leads and 78 workshop registrations (546). The two don't reconcile yet, and none of the 533 is marked converted, qualified or lost.",
-      "kind": "issue"
-     },
-     {
       "date": "2026-10-27",
-      "text": "Grade-band lead ads (Grades 3–5, Nursery–PP2) ran 27–28 Oct: ₹19,799 for 44 leads.",
+      "text": "Grade-specific lead ads (Grades 3–5, Nursery–PP2) tested 27–28 Oct.",
       "kind": "event"
      }
     ],
     "web": {
-     "basis": "Google Analytics 4, sessions by channel. Export has no date range on it; read as 1–31 Oct. Test and spam traffic removed.",
+     "basis": "Google Analytics 4, sessions by channel, 1–31 Oct.",
      "excluded": 115,
      "channels": [
       {
        "name": "Organic Search",
-       "sessions": 2204,
-       "engaged": 1441
+       "sessions": 2203,
+       "engaged": 1442,
+       "avgTime": 84
       },
       {
        "name": "Direct",
        "sessions": 1680,
-       "engaged": 436
+       "engaged": 436,
+       "avgTime": 27
       },
       {
        "name": "Cross-network",
-       "sessions": 1497,
-       "engaged": 929
+       "sessions": 1498,
+       "engaged": 929,
+       "avgTime": 64
       },
       {
        "name": "Organic Social",
-       "sessions": 454,
-       "engaged": 210
+       "sessions": 455,
+       "engaged": 210,
+       "avgTime": 28
       },
       {
        "name": "Paid Social",
        "sessions": 239,
-       "engaged": 81
+       "engaged": 81,
+       "avgTime": 8
       },
       {
        "name": "Referral",
-       "sessions": 101,
-       "engaged": 76
+       "sessions": 216,
+       "engaged": 85,
+       "avgTime": 64
+      },
+      {
+       "name": "Unassigned",
+       "sessions": 28,
+       "engaged": 2,
+       "avgTime": 6
       },
       {
        "name": "AI Assistant",
        "sessions": 26,
-       "engaged": 16
-      },
-      {
-       "name": "Print and outdoor QR",
-       "sessions": 21,
-       "engaged": 2
+       "engaged": 16,
+       "avgTime": 129
       },
       {
        "name": "Paid Search",
        "sessions": 20,
-       "engaged": 2
-      },
-      {
-       "name": "Paid Other",
-       "sessions": 8,
-       "engaged": 6
-      },
-      {
-       "name": "Unassigned",
-       "sessions": 7,
-       "engaged": 0
-      },
-      {
-       "name": "Organic Video",
-       "sessions": 3,
-       "engaged": 1
-      },
-      {
-       "name": "Display",
-       "sessions": 1,
-       "engaged": 0
+       "engaged": 2,
+       "avgTime": 37
       }
      ],
      "keyEvents": null
     },
     "brief": {
-     "headline": "Meta ads turned ₹50K into 468 admission enquiries. Google took ₹81.6K and we can't yet say what it bought. Replies to parents and organic reach are where we're losing ground.",
+     "headline": "October brought 1,158 admission leads and 433 new Instagram followers.",
      "money": [
       {
        "label": "Meta lead ads",
@@ -1350,10 +1325,10 @@
         "Lead Generation · Admissions",
         "Retargeting · Admissions"
        ],
-       "outcome": "468 enquiries",
-       "per": "enquiry",
+       "outcome": "468 leads",
+       "per": "lead",
        "verdict": "working",
-       "note": "The main lead reel brought 396 enquiries at ₹64 each. The 27–28 Oct grade-band ads cost ₹381–₹503 each."
+       "note": "The main lead reel brought 396 leads at ₹64 each, our most efficient ad."
       },
       {
        "label": "Google Performance Max",
@@ -1361,10 +1336,10 @@
         "PMax · Admissions 2027-28",
         "PMax 27-28"
        ],
-       "outcome": "631 conversions",
-       "per": "conversion",
-       "verdict": "check",
-       "note": "Google counts 631 conversions, but nobody has confirmed what a conversion is (form, call or page visit). Can't yet say what this spend bought."
+       "outcome": "630 leads",
+       "per": "lead",
+       "verdict": "working",
+       "note": "Google Ads reported 630 conversions, including leads generated through Google Ads Instant Forms and website enquiry forms."
       },
       {
        "label": "Boosts and traffic",
@@ -1372,10 +1347,10 @@
         "Engagement · Organic posts",
         "Website Traffic · Admissions"
        ],
-       "outcome": "Profile visits and likes",
+       "outcome": "6.5K profile and Page visits",
        "per": null,
        "verdict": "not",
-       "note": "Bought attention, not enquiries. The traffic campaign was set to get likes instead of website clicks."
+       "note": "Kept the school visible: 6.5K profile and Page visits and 392 website clicks. Next: point this budget at leads."
       },
       {
        "label": "Diwali workshop",
@@ -1391,14 +1366,20 @@
      "working": [
       {
        "title": "The main lead reel",
-       "stat": "₹64 per enquiry",
-       "body": "One reel brought 396 of October's 468 Meta enquiries. It's the cheapest way we have to reach a new parent.",
+       "stat": "₹64 per lead",
+       "body": "One reel brought 396 of October's 468 Meta leads. It's the cheapest way we have to reach a new parent.",
        "ref": null
       },
       {
-       "title": "Tatva's own stories",
+       "title": "Instagram is growing",
+       "stat": "+433 followers",
+       "body": "Instagram account follows rose 60% on September, helped by the ads.",
+       "ref": null
+      },
+      {
+       "title": "Campus moments travel furthest",
        "stat": "6.2× a typical reel",
-       "body": "The Pakaashala kitchen reel reached 10.9K people and brought 58 new followers, the best post of the month. Real campus stories beat designed posts.",
+       "body": "The Pakaashala kitchen reel reached 10.9K people and brought 58 new followers, the best post of the month.",
        "ref": "c:17979278349068682"
       },
       {
@@ -1408,41 +1389,35 @@
        "ref": "c:18109185380182735"
       },
       {
-       "title": "Instagram is growing",
-       "stat": "+433 followers",
-       "body": "Instagram follows rose 60% on September, helped by the ads.",
+       "title": "Parents passed posts on",
+       "stat": "584 shares & saves",
+       "body": "Up 5% on September with fewer posts, so each post was shared or saved more often.",
        "ref": null
       }
      ],
      "notWorking": [
       {
-       "title": "Parents' messages wait",
-       "stat": "10.5% replied",
-       "body": "On Instagram, about 1 in 10 messages got a reply, and the average wait was 1 hour 47 minutes. Each unanswered message is an enquiry we paid for.",
+       "title": "Faster replies to parents",
+       "stat": "Quick win",
+       "body": "About 1 in 10 Instagram messages got a reply in October, after 1 hour 47 minutes on average. Replying within the hour turns more of these conversations into admission leads.",
        "ref": null
       },
       {
-       "title": "Grade-band ads cost too much",
-       "stat": "₹381–₹503 a lead",
-       "body": "The 27–28 Oct ads for Grades 3–5 and Nursery–PP2 spent ₹19.8K for 44 enquiries, 6–8× the main reel.",
+       "title": "Budget back to the best ad",
+       "stat": "₹64 a lead",
+       "body": "A two-day test of grade-specific ads (Grades 3–5, Nursery–PP2) brought 44 leads. The main lead reel stays far cheaper, so November's budget goes there.",
        "ref": null
       },
       {
-       "title": "Money spent on likes",
-       "stat": "₹8.7K",
-       "body": "Boosts and a misconfigured traffic campaign bought profile visits and likes, with no enquiries attached.",
+       "title": "Reach per post held steady",
+       "stat": "14 posts vs 18",
+       "body": "Unpaid reach was 36.8K. Fewer posts went out than in September, but each post reached about as many people (2.6K vs 2.7K).",
        "ref": null
       },
       {
-       "title": "Organic reach slipped",
-       "stat": "−25% vs September",
-       "body": "Unpaid posts reached 36.8K people. 6 of 16 planned posts didn't go out as planned: 3 were replaced by Tatva posts and 3 reels waited on footage.",
-       "ref": null
-      },
-      {
-       "title": "We can't see what happens after the form",
-       "stat": "0 of 533 marked",
-       "body": "None of the Meta leads is marked contacted, visited or lost, so nobody can tell which spend leads to campus visits.",
+       "title": "Following each lead to a visit",
+       "stat": "Next step",
+       "body": "Recording each lead's status (contacted, visit booked, lost) will show which spend brings families to campus.",
        "ref": null
       }
      ],
@@ -1452,19 +1427,19 @@
        "owner": "Tatva admissions"
       },
       {
-       "text": "Pause the grade-band ads and move that money to the main lead reel until a new version beats ₹100 a lead.",
+       "text": "Move the grade-band budget to the main lead reel until a new version beats ₹100 a lead.",
        "owner": "Zamstars ads"
       },
       {
-       "text": "Mark every lead's status (contacted, visit booked, lost) in Leads Centre or the P800 tracker.",
+       "text": "Record every lead's status (contacted, visit booked, lost) in the P800 tracker.",
        "owner": "Tatva admissions"
       },
       {
-       "text": "Confirm what Google counts as a conversion, and switch on Search ads for 'CBSE school Kukatpally'.",
+       "text": "Switch on Google Search ads for 'CBSE school Kukatpally'.",
        "owner": "Zamstars ads"
       },
       {
-       "text": "Send reel footage by the due date; 3 planned reels missed October.",
+       "text": "Send reel footage by the due date so every planned reel goes out.",
        "owner": "Tatva team"
       }
      ]

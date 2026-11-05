@@ -75,7 +75,7 @@ export function PlanView({ month, open }: P) {
         {month.kind === 'report' && <label className="check"><input type="checkbox" checked={showCollab} onChange={(e) => setShowCollab(e.target.checked)} /> Collab posts</label>}
         <div className="legend">
           {month.kind === 'report'
-            ? (['On date', 'Rescheduled', 'Not posted', 'Replaced', 'Upcoming'] as const).map((s) => <span key={s} className={`lg ${STATUS_ST[s]}`}>{s}</span>).concat([<span key="tv" className="lg st-tatva">Added by Tatva</span>, <span key="lm" className="lg st-lm">Last-minute</span>, <span key="o" className="lg st-out">Outside plan</span>])
+            ? (['On date', 'Rescheduled', 'Not posted', 'Replaced', 'Upcoming'] as const).map((s) => <span key={s} className={`lg ${STATUS_ST[s]}`}>{s}</span>).concat([<span key="tv" className="lg st-tatva">Added in month</span>, <span key="lm" className="lg st-lm">Last-minute</span>, <span key="o" className="lg st-out">Outside plan</span>])
             : [<span key="a" className="lg st-ok">Design ready</span>, <span key="b" className="lg st-late">Script ready</span>, <span key="c" className="lg st-miss">Needs footage</span>]}
         </div>
       </div>

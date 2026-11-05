@@ -1,16 +1,15 @@
 import { RANGE } from '../lib/data'
 import { noPreview } from '../lib/data'
 import { useMemo, useState } from 'react'
-import type { Content, PlanItem, ReportMonth, VerdictKey } from '../types'
+import type { Content, ReportMonth, VerdictKey } from '../types'
 import type { Selection } from '../components/Drawer'
-import { contentById, monthContent, monthPlan, movedBy, reportMonths, statusClass } from '../lib/data'
+import { monthContent, reportMonths } from '../lib/data'
 import { day, n, plural } from '../lib/format'
 import { Creative } from '../components/Creative'
-import { MarkerChip, VerdictChip } from '../components/Badges'
+import { VerdictChip } from '../components/Badges'
 import { StatTile } from '../components/Charts'
 import { FourUp } from '../components/PostNumbers'
-import { Icon } from '../components/Icon'
-import { FunnelStrip, MonthContext, PaidBlock, PartialNotice, WebBlock, WhoPosted } from './Funnel'
+import { FunnelStrip, MonthContext, PaidBlock, PartialNotice, WebBlock } from './Funnel'
 
 function Feature({ c, open, compact }: { c: Content; open: (s: Selection) => void; compact?: boolean }) {
   return (
@@ -54,23 +53,10 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
   const collabs = monthContent(month.id).filter((c) => c.marker === 'collab')
   const ranked = [...own].filter((c) => c.verdict?.score !== null && c.verdict?.score !== undefined).sort((a, b) => b.verdict!.score! - a.verdict!.score!)
   const best = ranked.filter((c) => c.verdict!.key === 'standout').slice(0, 4)
-  const quiet = [...ranked].reverse().filter((c) => c.verdict!.key === 'quiet').slice(0, 2)
-  const pl = monthPlan(month.id)
-  const missed = pl.filter((p) => p.status === 'Not posted' || p.status === 'Replaced')
-  const footageMissed = missed.filter((p) => p.status === 'Not posted' && p.dependency === 'Footage from Tatva').length
-  // Planned rows and posts added outside the calendar, in one list by date.
-  const timeline = [
-    ...pl.map((p) => ({ kind: 'plan' as const, p, d: p.date ?? '9999' })),
-    ...own.filter((c) => c.marker !== 'planned').map((c) => ({ kind: 'added' as const, c, d: c.date.slice(0, 10) })),
-  ].sort((a, b) => a.d.localeCompare(b.d))
-  const planLine = (p: PlanItem) => {
-    const live = p.contentId ? contentById.get(p.contentId) : undefined
-    if (p.status === 'On date') return 'Went out on the day'
-    if (p.status === 'Rescheduled' && live) return `Rescheduled · went out ${day(live.date)} (${movedBy(p.lag)})`
-    if (p.status === 'Replaced') { const r = p.replacedBy ? contentById.get(p.replacedBy) : undefined; return r ? `Replaced by “${r.title}”` : 'Slot used for a more timely post' }
-    if (p.status === 'Not posted') return p.dependency === 'Footage from Tatva' ? 'Not posted · waiting on footage' : 'Not posted'
-    return p.status
-  }
+  // Posts not in the calendar: campus moments added during the month.
+  const added = own.filter((c) => c.marker === 'tatva' || c.marker === 'lastminute' || c.marker === 'unconfirmed').length
+  // When fewer posts went out than last month, say so next to the totals.
+  const fewer = prev && prev.summary.posts > s.posts ? `${s.posts} posts vs ${prev.summary.posts} in ${prev.label}` : ''
   const list = useMemo(() => own.filter((c) => filter === 'all' || c.verdict?.key === filter).sort((a, b) => b.date.localeCompare(a.date)), [own, filter])
   const spark = (k: 'reached' | 'reactions' | 'passedOn' | 'follows') => upto.map((m) => ({ label: m.label, value: m.summary.plain[k] }))
 
@@ -87,7 +73,7 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
       </header>
 
       <section className="section" style={{ marginTop: 32 }}>
-        <div className="s-head"><h2 className="s-title">From reach to admissions</h2><span className="s-note">What social media fed into Project 800</span></div>
+        <div className="s-head"><h2 className="s-title">From reach to admissions</h2><span className="s-note">What social media, ads and the school portal fed into Project 800</span></div>
         <FunnelStrip month={month} />
       </section>
 
@@ -96,11 +82,13 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
       <div className="tiles">
         <StatTile label="People reached" value={n(s.plain.reached)} cur={s.plain.reached} prev={prev?.summary.plain.reached} prevLabel={prev?.label} spark={spark('reached')} onClick={() => open({ kind: 'm', id: `reached|${month.id}` })}
           info="Added up across posts, organic only: someone who saw two posts counts twice."
-          note={s.boostReach > 0 ? `+${n(s.boostReach)} more through boosts` : undefined} />
-        <StatTile label="Reactions & comments" value={n(s.plain.reactions)} cur={s.plain.reactions} prev={prev?.summary.plain.reactions} prevLabel={prev?.label} spark={spark('reactions')} onClick={() => open({ kind: 'm', id: `reactions|${month.id}` })} />
+          note={[fewer, s.boostReach > 0 ? `+${n(s.boostReach)} more through boosts` : ''].filter(Boolean).join(' · ') || undefined} />
+        <StatTile label="Reactions & comments" value={n(s.plain.reactions)} cur={s.plain.reactions} prev={prev?.summary.plain.reactions} prevLabel={prev?.label} spark={spark('reactions')} onClick={() => open({ kind: 'm', id: `reactions|${month.id}` })}
+          note={fewer || undefined} />
         <StatTile label="Shares & saves" value={n(s.plain.passedOn)} cur={s.plain.passedOn} prev={prev?.summary.plain.passedOn} prevLabel={prev?.label} spark={spark('passedOn')} onClick={() => open({ kind: 'm', id: `passedOn|${month.id}` })}
           info="Parents sending a post on or keeping it — the strongest sign it mattered." />
-        <StatTile label="New followers" value={n(s.plain.follows)} cur={s.plain.follows} prev={prev?.summary.plain.follows} prevLabel={prev?.label} spark={spark('follows')} onClick={() => open({ kind: 'm', id: `follows|${month.id}` })} />
+        <StatTile label="New followers from posts" value={n(s.plain.follows)} cur={s.plain.follows} prev={prev?.summary.plain.follows} prevLabel={prev?.label} spark={spark('follows')} onClick={() => open({ kind: 'm', id: `follows|${month.id}` })}
+          info="Follows that came from these posts. The Accounts page counts all new Instagram and Facebook follows, including those from ads." />
       </div>
       </section>
 
@@ -111,61 +99,27 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
         </section>
       )}
 
-      {quiet.length > 0 && (
+      <section className="section">
+        <div className="s-head"><h2 className="s-title">This month's posts</h2></div>
+        <div className="panel">
+          <p className="p-sub" style={{ margin: 0 }}>
+            <strong>{plural(s.posts, 'post')}</strong> went out on Instagram and Facebook in {month.label}
+            {added > 0 ? <>, including {plural(added, 'campus moment')} added during the month</> : null}. All posts are published by Zamstars; reels are shot and edited by the Tatva team.
+          </p>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="s-head"><h2 className="s-title">Paid</h2><span className="s-note">Kept apart from the organic numbers above</span></div>
+        <PaidBlock month={month} />
+      </section>
+
+      {month.leads?.web && (
         <section className="section">
-          <div className="s-head"><h2 className="s-title">Quieter than usual</h2><span className="s-note">Worth a different angle next time</span></div>
-          <div className="stack">{quiet.map((c) => <Feature key={c.id} c={c} open={open} compact />)}</div>
+          <div className="s-head"><h2 className="s-title">Website visits</h2><span className="s-note">Google Analytics · 1–31 {month.label.slice(0, 3)}</span></div>
+          <WebBlock month={month} />
         </section>
       )}
-
-      <section className="section">
-        <div className="s-head"><h2 className="s-title">The plan</h2></div>
-        <div className="delivery">
-          <div>
-            <div className="dl-big">{s.delivered} of {s.due}</div>
-            <p className="muted">planned posts went out{s.status['Upcoming'] ? ` · ${s.status['Upcoming']} more scheduled for the last days of the month` : ''}.</p>
-            <div className="dl-bar">
-              {Array.from({ length: s.due }, (_, i) => <span key={i} style={{ flex: 1, background: i < s.delivered ? 'var(--good)' : 'var(--mute-mark)' }} />)}
-            </div>
-            {footageMissed > 0 && <p className="fine">{plural(footageMissed, 'reel')} couldn’t go out because the footage from the Tatva team didn’t come in.</p>}
-            {(s.markers.tatva ?? 0) > 0 && <p className="fine" style={{ marginTop: 6 }}>Plus {plural(s.markers.tatva ?? 0, 'post')} added by the Tatva team (events, awards, impromptu reels).</p>}
-            {(s.markers.lastminute ?? 0) + (s.markers.unconfirmed ?? 0) > 0 && (
-              <p className="fine" style={{ marginTop: 6 }}>Plus {plural((s.markers.lastminute ?? 0) + (s.markers.unconfirmed ?? 0), 'last-minute post')} from Zamstars.</p>
-            )}
-          </div>
-          <div className="dl-list plan-list">
-            {timeline.map((e) => e.kind === 'plan' ? (
-              <button key={e.p.id} className="dl-item" onClick={() => open(e.p.contentId ? { kind: 'c', id: e.p.contentId } : { kind: 'p', id: e.p.id })}>
-                <span className="dl-date">{day(e.p.date)}</span>
-                <span>
-                  <span className="dl-t">{e.p.title}</span><br />
-                  <span className={`dl-s st-${statusClass(e.p.status)}`}>{planLine(e.p)}</span>
-                </span>
-                <Icon name="arrow" size={16} />
-              </button>
-            ) : (
-              <button key={e.c.id} className="dl-item added" onClick={() => open({ kind: 'c', id: e.c.id })}>
-                <span className="dl-date">{day(e.c.date)}</span>
-                <span>
-                  <span className="dl-t">{e.c.title}</span><br />
-                  <span className="dl-s"><MarkerChip marker={e.c.marker} /> <span style={{ marginLeft: 4 }}>Not in the calendar · {e.c.format}</span></span>
-                </span>
-                <Icon name="arrow" size={16} />
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="panel" style={{ marginTop: 14 }}>
-          <div className="panel-head"><h3>Who posted</h3><span className="muted">Every post on your pages this month</span></div>
-          <WhoPosted month={month} />
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="s-head"><h2 className="s-title">Paid and website</h2><span className="s-note">Kept apart from the organic numbers above</span></div>
-        <PaidBlock month={month} />
-        {month.leads?.web && <div style={{ marginTop: 14 }}><WebBlock month={month} /></div>}
-      </section>
 
       <section className="section">
         <div className="s-head">

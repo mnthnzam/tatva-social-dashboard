@@ -504,7 +504,7 @@ textarea, input, select { font: inherit; color: var(--ink); }
 :root[data-theme='dark'] { --ig: #3987e5; --fb: #199e70; }
 
 /* ============================================================ funnel, paid, who posted (Oct report) */
-.funnel { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.funnel { display: grid; grid-template-columns: repeat(var(--fn-n, 5), minmax(0, 1fr)); gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
 .fn-stage { position: relative; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .fn-stage + .fn-stage { border-left: 1px solid var(--line); }
 .fn-stage:first-child { background: var(--sunken); }
@@ -682,3 +682,21 @@ textarea, input, select { font: inherit; color: var(--ink); }
 }
 .ins-card { font: inherit; font-weight: 400; color: var(--ink); width: 100%; }
 .ins-card h3 { color: var(--ink); }
+
+/* "What we're sharpening" cards on Insights */
+.ins-ic.focus { background: var(--warn-soft); color: var(--warn); }
+.ins-card.focus { border-left-color: var(--warn); }
+.ic-stat.focus { color: var(--warn); }
+
+/* Website visits: header row, avg-time column, three headline numbers */
+.web-list.timed li { grid-template-columns: 170px minmax(0, 1fr) 64px 64px 64px; }
+.web-list li.web-head { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); }
+.web-list li.web-head em, .web-list li.web-head b { color: var(--ink-3); font-size: 11.5px; }
+.web-list.timed em { text-align: right; }
+.paid-sum.web-sum { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 860px) {
+  .web-list.timed li { grid-template-columns: minmax(0, 1fr) 62px 66px 58px; gap: 8px; }
+  .web-list.timed .web-bar, .web-list.timed li.web-head > span:nth-child(2) { display: none; }
+  .web-list.timed em { display: block; }
+  .paid-sum.web-sum { grid-template-columns: 1fr; }
+}

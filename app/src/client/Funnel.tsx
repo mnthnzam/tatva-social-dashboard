@@ -1,11 +1,12 @@
+import type { CSSProperties } from 'react'
 import type { FunnelKey, FunnelStage, ReportMonth } from '../types'
 import { DATA, monthContent, monthEnd, planById } from '../lib/data'
-import { day, n, pct, plural } from '../lib/format'
+import { day, n, pct, plural, secs } from '../lib/format'
 
 const STAGES: { key: 'reach' | FunnelKey; label: string; hint: string }[] = [
   { key: 'reach', label: 'People reached', hint: 'Organic reach added across posts' },
   { key: 'conversations', label: 'Conversations', hint: 'Messages and WhatsApp chats started' },
-  { key: 'enquiries', label: 'Enquiries', hint: 'Leads in the admissions tracker' },
+  { key: 'enquiries', label: 'Leads', hint: 'Admission leads from every source' },
   { key: 'visits', label: 'Campus visits', hint: 'Visits recorded against a lead' },
   { key: 'admissions', label: 'Admissions', hint: 'Admissions against a lead' },
 ]
@@ -17,17 +18,18 @@ export function FunnelStrip({ month }: { month: ReportMonth }) {
   const stages = STAGES.map((st) => {
     if (st.key === 'reach') return { ...st, stage: { value: month.summary.plain.reached } as FunnelStage }
     return { ...st, stage: L?.funnel[st.key] ?? { value: null } }
-  })
+  }).filter((st) => !tracked || st.stage.value !== null) // once tracking is on, stages with no number yet are left out
+  const hasVisits = stages.some((st) => st.key === 'visits' || st.key === 'admissions')
   return (
     <>
-      <div className="funnel">
+      <div className="funnel" style={{ '--fn-n': stages.length } as CSSProperties}>
         {stages.map((st, i) => {
           const v = st.stage.value
           const prev = i > 0 ? stages[i - 1].stage.value : null
           // Only visits and admissions are subsets of the step before. Reach is summed across posts, and lead forms
           // don't pass through messages, so no rate is shown into conversations or enquiries.
           const rate = i > 2 && v !== null && prev ? v / prev : null
-          const srcs = Object.entries(st.stage.sources ?? {})
+          const srcs = Object.entries(st.stage.sources ?? {}).filter(([, x]) => x !== null)
           return (
             <div key={st.key} className={`fn-stage${v === null ? ' empty' : ''}`}>
               {i > 0 && <span className="fn-rate" aria-hidden={rate === null}>{rate !== null ? (rate < 0.001 ? '<0.1%' : pct(rate, rate < 0.1 ? 1 : 0)) : ''}</span>}
@@ -45,7 +47,7 @@ export function FunnelStrip({ month }: { month: ReportMonth }) {
         })}
       </div>
       {!tracked && L?.trackingNote && <p className="fine" style={{ marginTop: 10 }}>{L.trackingNote}</p>}
-      {tracked && <p className="fine" style={{ marginTop: 10 }}>Visits and admissions show their share of the step before. Lead-form enquiries don’t pass through messages, so those two aren’t chained. Leads with no source recorded are counted openly, not left out.</p>}
+      {tracked && hasVisits && <p className="fine" style={{ marginTop: 10 }}>Visits and admissions show their share of the step before.</p>}
     </>
   )
 }
@@ -117,33 +119,45 @@ export function PaidBlock({ month }: { month: ReportMonth }) {
           </ul>
         </div>
       ))}
-      <p className="fine">Reach and engagement elsewhere on this page are organic only. Results are counted the way each platform reports them, so leads, visits and clicks are not added together.</p>
+      <p className="fine">Reach and engagement elsewhere on this page are organic only.</p>
     </div>
   )
 }
 
-/** Where website sessions came from (GA4). Social channels are highlighted. */
+/** Where website sessions came from (GA4): three headline numbers, then channels. Social channels are highlighted. */
 export function WebBlock({ month }: { month: ReportMonth }) {
   const W = month.leads?.web
   if (!W) return null
   const total = W.channels.reduce((a, c) => a + c.sessions, 0)
+  const engaged = W.channels.reduce((a, c) => a + c.engaged, 0)
+  const socialTotal = W.channels.filter((c) => /Social/.test(c.name)).reduce((a, c) => a + c.sessions, 0)
   const max = Math.max(...W.channels.map((c) => c.sessions))
+  const timed = W.channels.some((c) => c.avgTime != null)
   const social = (k: string) => /Social/.test(k)
   return (
-    <div className="panel">
-      <div className="panel-head"><h3>Website visits by channel</h3><span className="muted">{n(total)} sessions</span></div>
-      <ul className="web-list">
-        {W.channels.map((c) => (
-          <li key={c.name} className={social(c.name) ? 'hl' : ''}>
-            <span>{c.name}</span>
-            <span className="web-bar"><i style={{ width: `${(c.sessions / max) * 100}%` }} /></span>
-            <b>{n(c.sessions)}</b>
-            <em>{c.sessions ? pct(c.engaged / c.sessions) : '—'} engaged</em>
-          </li>
-        ))}
-      </ul>
-      <p className="fine" style={{ marginTop: 10 }}>{W.basis}{W.excluded ? ` ${n(W.excluded)} sessions removed.` : ''} Form submissions by channel aren’t in this export yet.</p>
-    </div>
+    <>
+      <div className="paid-sum web-sum">
+        <div><strong>{n(total)}</strong><span>website sessions</span></div>
+        <div><strong>{n(engaged)}</strong><span>engaged sessions · {pct(engaged / total)} of all visits</span></div>
+        <div><strong>{n(socialTotal)}</strong><span>sessions from Instagram &amp; Facebook (organic and paid)</span></div>
+      </div>
+      <div className="panel" style={{ marginTop: 14 }}>
+        <div className="panel-head"><h3>Visits by channel</h3><span className="muted">{n(total)} sessions</span></div>
+        <ul className={`web-list${timed ? ' timed' : ''}`}>
+          <li className="web-head"><span>Channel</span><span /><b>Sessions</b><em>Engaged</em>{timed && <em>Avg time</em>}</li>
+          {W.channels.map((c) => (
+            <li key={c.name} className={social(c.name) ? 'hl' : ''}>
+              <span>{c.name}</span>
+              <span className="web-bar"><i style={{ width: `${(c.sessions / max) * 100}%` }} /></span>
+              <b>{n(c.sessions)}</b>
+              <em>{c.sessions ? pct(c.engaged / c.sessions) : '—'}</em>
+              {timed && <em>{c.avgTime != null ? secs(c.avgTime) : '—'}</em>}
+            </li>
+          ))}
+        </ul>
+        <p className="fine" style={{ marginTop: 10 }}>{W.basis} Engaged: visits that lasted 10 seconds or more, completed a key action, or viewed two or more pages.</p>
+      </div>
+    </>
   )
 }
 

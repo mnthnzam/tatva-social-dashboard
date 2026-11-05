@@ -4,16 +4,16 @@ import { contentById, monthContent, monthPlan, reportMonths } from '../lib/data'
 import { n, pct, plural } from '../lib/format'
 import { Creative } from '../components/Creative'
 import { Icon } from '../components/Icon'
-import { FunnelStrip } from './Funnel'
 
 const inr = (x: number) =>
   x >= 100000 ? `₹${(x / 100000).toFixed(2).replace(/\.?0+$/, '')}L` : x >= 1000 ? `₹${(x / 1000).toFixed(1).replace(/\.0$/, '')}K` : `₹${Math.round(x)}`
 
 const VERDICT = {
   working: { label: 'Working', cls: 'good' },
-  check: { label: 'Needs checking', cls: 'warn' },
-  not: { label: 'Not working', cls: 'bad' },
+  check: { label: 'Being confirmed', cls: 'warn' },
+  not: { label: 'Awareness', cls: 'warn' },
 } as const
+const VERDICT_ORDER = { working: 0, check: 1, not: 2 } as const
 
 /** The owner's page: one month, read in two minutes. Money first, then what to keep, what to fix, and what to decide. */
 export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Selection) => void; go: (page: string) => void }) {
@@ -27,9 +27,16 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
   const camps = L?.paid.campaigns ?? []
   const spend = L?.paid.spend ?? null
   const enquiries = L?.funnel.enquiries?.value ?? null
-  const metaLeadSpend = camps.filter((c) => c.platform === 'Meta' && c.resultType === 'leads').reduce((a, c) => a + (c.spend ?? 0), 0)
+  // Leads by source for the KPI line: Meta sources added together, the rest named.
+  const leadSrcs = Object.entries(L?.funnel.enquiries?.sources ?? {}).filter((e): e is [string, number] => e[1] !== null)
+  const metaLeads = leadSrcs.filter(([k]) => k.startsWith('Meta')).reduce((a, [, v]) => a + v, 0)
+  const leadSplit = [...(metaLeads ? [`Meta ${n(metaLeads)}`] : []), ...leadSrcs.filter(([k]) => !k.startsWith('Meta')).map(([k, v]) => `${k} ${n(v)}`)].join(' · ')
   const web = L?.web ? L.web.channels.reduce((a, c) => a + c.sessions, 0) : null
   const reachDelta = prev && prev.summary.plain.reached ? s.plain.reached / prev.summary.plain.reached - 1 : null
+  // Fewer posts, same reach per post: say so rather than show a bare drop.
+  const perPost = s.posts ? s.plain.reached / s.posts : 0
+  const prevPerPost = prev && prev.summary.posts ? prev.summary.plain.reached / prev.summary.posts : 0
+  const steadyPerPost = reachDelta !== null && reachDelta < 0 && prevPerPost > 0 && Math.abs(perPost / prevPerPost - 1) <= 0.1
 
   // Without a written brief (months before lead tracking), fall back to what the posts alone can say.
   const ranked = own.filter((c) => c.verdict?.score != null).sort((a, b) => b.verdict!.score! - a.verdict!.score!)
@@ -47,7 +54,7 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
     const sp = cs.reduce((a, c) => a + (c.spend ?? 0), 0)
     const res = cs.reduce((a, c) => a + (c.results ?? 0), 0)
     return { ...g, spend: sp, results: res }
-  }).sort((a, b) => b.spend - a.spend)
+  }).sort((a, b) => VERDICT_ORDER[a.verdict] - VERDICT_ORDER[b.verdict] || b.spend - a.spend)
   const moneyTotal = money.reduce((a, g) => a + g.spend, 0)
 
   const refOpen = (ref: string | null) => {
@@ -66,9 +73,11 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
 
       <div className="ins-kpis">
         <Kpi label="Spent on ads" value={spend !== null ? inr(spend) : '—'} sub={L?.paid.spendBy ? Object.entries(L.paid.spendBy).map(([k, v]) => `${k} ${inr(v)}`).join(' · ') : 'Paid data starts in October'} />
-        <Kpi label="Admission enquiries" value={enquiries !== null ? n(enquiries) : '—'} sub={enquiries && metaLeadSpend ? `₹${Math.round(metaLeadSpend / enquiries)} each from Meta ads` : 'Lead tracking starts in October'} accent />
-        <Kpi label="People reached, unpaid" value={n(s.plain.reached)} sub={reachDelta !== null ? `${reachDelta >= 0 ? '↑' : '↓'} ${pct(Math.abs(reachDelta))} on ${prev!.label}` : 'Organic reach across posts'} tone={reachDelta !== null ? (reachDelta >= 0 ? 'up' : 'down') : undefined} />
-        <Kpi label="Posts that went out" value={String(s.posts)} sub={`${s.delivered} of ${s.due} planned${added ? ` + ${added} added by Tatva` : ''}`} />
+        <Kpi label="Admission leads" value={enquiries !== null ? n(enquiries) : '—'} sub={enquiries ? leadSplit : 'Lead tracking starts in October'} accent />
+        <Kpi label="People reached" value={n(s.plain.reached)}
+          sub={steadyPerPost ? `About ${(perPost / 1000).toFixed(1)}K per post, in line with ${prev!.label}` : reachDelta !== null ? `${reachDelta >= 0 ? '↑' : '↓'} ${pct(Math.abs(reachDelta))} on ${prev!.label}` : 'Organic reach across posts'}
+          tone={steadyPerPost ? undefined : reachDelta !== null ? (reachDelta >= 0 ? 'up' : 'down') : undefined} />
+        <Kpi label="Posts that went out" value={String(s.posts)} sub={`On Instagram and Facebook${added ? `, incl. ${added} added during the month` : ''}`} />
         {web !== null && <Kpi label="Website visits" value={n(web)} sub="All channels, Google Analytics" />}
       </div>
 
@@ -90,7 +99,7 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
                 </div>
                 <div className="mr-nums">
                   <span><b>{inr(g.spend)}</b>{pct(g.spend / moneyTotal)} of spend</span>
-                  <span><b>{g.outcome}</b>{g.per && g.results ? `₹${Math.round(g.spend / g.results)} per ${g.per}` : 'no enquiries'}</span>
+                  <span><b>{g.outcome}</b>{g.per && g.results ? `₹${Math.round(g.spend / g.results)} per ${g.per}` : ''}</span>
                 </div>
               </div>
             ))}
@@ -106,9 +115,9 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
           </div>
         </div>
         <div>
-          <div className="ins-h"><h2><span className="ins-ic bad"><Icon name="down" size={16} /></span>What isn't</h2></div>
+          <div className="ins-h"><h2><span className="ins-ic focus"><Icon name="arrow" size={16} /></span>{brief ? `What we're sharpening for ${nextMonth(month.id)}` : "What isn't"}</h2></div>
           <div className="ins-cards">
-            {notWorking.map((w) => <Card key={w.title} item={w} tone="bad" post={refPost(w.ref)} onOpen={() => refOpen(w.ref)} />)}
+            {notWorking.map((w) => <Card key={w.title} item={w} tone={brief ? 'focus' : 'bad'} post={refPost(w.ref)} onOpen={() => refOpen(w.ref)} />)}
           </div>
         </div>
       </section>
@@ -123,11 +132,6 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
           </ol>
         </section>
       )}
-
-      <section className="ins-sec">
-        <div className="ins-h"><h2>From reach to admissions</h2><span>How far social media carried parents this month</span></div>
-        <FunnelStrip month={month} />
-      </section>
 
       <div className="ins-more">
         <button className="btn btn-line" onClick={() => go('results')}>See every number for {month.label} <Icon name="arrow" size={16} /></button>
@@ -147,7 +151,7 @@ function Kpi({ label, value, sub, accent, tone }: { label: string; value: string
   )
 }
 
-function Card({ item, tone, post, onOpen }: { item: BriefItem; tone: 'good' | 'bad'; post?: Content; onOpen: () => void }) {
+function Card({ item, tone, post, onOpen }: { item: BriefItem; tone: 'good' | 'bad' | 'focus'; post?: Content; onOpen: () => void }) {
   const Tag = item.ref ? 'button' : 'div'
   return (
     <Tag className={`ins-card ${tone}${item.ref ? ' link' : ''}`} onClick={item.ref ? onOpen : undefined}>

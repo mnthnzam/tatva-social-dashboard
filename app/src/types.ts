@@ -64,7 +64,7 @@ export interface PaidCampaign {
   spend: number | null; reach: number | null; results: number | null; resultType: string | null; note?: string
   status?: string; impressions?: number | null; clicks?: number | null
 }
-export interface WebChannel { name: string; sessions: number; engaged: number }
+export interface WebChannel { name: string; sessions: number; engaged: number; avgTime?: number | null }
 export interface MonthLeads {
   tracked: boolean; trackingNote?: string
   funnel: Partial<Record<FunnelKey, FunnelStage>>

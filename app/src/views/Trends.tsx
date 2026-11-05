@@ -51,7 +51,7 @@ export function Trends({ open, go }: { open: (s: Selection) => void; go: (r: Par
         <section className="panel">
           <div className="panel-head"><h3>Where posts came from</h3></div>
           <table className="mini">
-            <thead><tr><th /><th>Planned</th><th>Added by Tatva</th><th>Last-minute</th><th>Unconfirmed</th><th>Collab</th></tr></thead>
+            <thead><tr><th /><th>Planned</th><th>Added in month</th><th>Last-minute</th><th>Unconfirmed</th><th>Collab</th></tr></thead>
             <tbody>{reportMonths.map((m) => (
               <tr key={m.id}><td>{m.label}</td><td>{m.summary.markers.planned ?? 0}</td><td>{m.summary.markers.tatva ?? 0}</td><td>{m.summary.markers.lastminute ?? 0}</td><td>{m.summary.markers.unconfirmed ?? 0}</td><td>{m.summary.collab.posts}</td></tr>
             ))}</tbody>

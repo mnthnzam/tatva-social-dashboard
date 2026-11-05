@@ -34,7 +34,7 @@ _leads_path = os.path.join(RAW, 'leads.json')
 LEADS = json.load(open(_leads_path)) if os.path.exists(_leads_path) else {'months': {}, 'inputs': None}
 # Monthly value (Project 800 canon). May has none.
 MONTH_VALUES = {1: 'Courteous', 2: 'Helpful', 3: 'Obedient', 4: 'Cooperative', 6: 'Responsible', 7: 'Simple',
-                8: 'Patriotic', 9: 'Respectful', 10: 'Acceptive', 11: 'Patient', 12: 'Honest'}
+                8: 'Patriotic', 9: 'Respectful', 10: 'Being Acceptive', 11: 'Patient', 12: 'Honest'}
 FUNNEL_JOBS = ('reach', 'enquiry', 'visit')
 FOUR_CS = ('Cognition', 'Curiosity', 'Compassion', 'Character', 'Contribution')
 
