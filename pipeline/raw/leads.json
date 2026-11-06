@@ -362,6 +362,12 @@
         ],
         "notWorking": [
           {
+            "title": "Warm leads to campus visits",
+            "stat": "756 warm leads",
+            "body": "756 October leads are Interested or waiting on a call back. A campus-visit drive starts with the 44 warm leads who missed a booked visit and the 240 call-backs older than 14 days.",
+            "ref": null
+          },
+          {
             "title": "Faster replies to parents",
             "stat": "Quick win",
             "body": "About 1 in 10 Instagram messages got a reply in October, after 1 hour 47 minutes on average. Replying within the hour turns more of these conversations into admission leads.",
@@ -380,13 +386,17 @@
             "ref": null
           },
           {
-            "title": "Following each lead to a visit",
-            "stat": "Next step",
-            "body": "Recording each lead's status (contacted, visit booked, lost) will show which spend brings families to campus.",
+            "title": "Cleaner Google traffic",
+            "stat": "Job-seeker filter",
+            "body": "110 cancelled leads were job-seekers. Job-related negative keywords (jobs, vacancy, teacher, careers) keep ad spend on parents.",
             "ref": null
           }
         ],
         "decisions": [
+          {
+            "text": "Run a campus-visit drive this week on warm leads, starting with the 44 missed visits and 240 older call-backs.",
+            "owner": "Tatva admissions"
+          },
           {
             "text": "Reply to every Instagram and WhatsApp message within an hour, including weekends.",
             "owner": "Tatva admissions"
@@ -396,17 +406,52 @@
             "owner": "Zamstars ads"
           },
           {
-            "text": "Record every lead's status (contacted, visit booked, lost) in the P800 tracker.",
-            "owner": "Tatva admissions"
-          },
-          {
-            "text": "Switch on Google Search ads for 'CBSE school Kukatpally'.",
+            "text": "Add job-related negative keywords and switch on Google Search ads for 'CBSE school Kukatpally'.",
             "owner": "Zamstars ads"
           },
           {
             "text": "Send reel footage by the due date so every planned reel goes out.",
             "owner": "Tatva team"
           }
+        ]
+      },
+      "journey": {
+        "title": "Lead-to-admission journey",
+        "basis": "All channels combined, from the school's October admissions tracker. The tracker counts every lead logged in October, so its total differs from the Meta, Google Ads and school portal figures above.",
+        "steps": [
+          {
+            "label": "Leads recorded",
+            "value": 1321,
+            "note": "All October leads"
+          },
+          {
+            "label": "Not cancelled",
+            "value": 824,
+            "note": null
+          },
+          {
+            "label": "Warm leads",
+            "value": 756,
+            "note": "Interested + Call Back"
+          },
+          {
+            "label": "Interested",
+            "value": 404,
+            "note": null
+          },
+          {
+            "label": "Walk-ins",
+            "value": 27,
+            "note": "Counted up to 5 Nov"
+          },
+          {
+            "label": "Application stage",
+            "value": 5,
+            "note": "CRM status"
+          }
+        ],
+        "notes": [
+          "Walk-ins are counted through 5 Nov; 12 of the 27 happened in early November."
         ]
       }
     }

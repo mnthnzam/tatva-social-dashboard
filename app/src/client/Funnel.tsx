@@ -162,6 +162,31 @@ export function WebBlock({ month }: { month: ReportMonth }) {
 }
 
 /** Shown when the export stopped before the month ended. */
+export function JourneyBlock({ month }: { month: ReportMonth }) {
+  const j = month.leads?.journey
+  if (!j || !j.steps.length) return null
+  const top = j.steps[0].value
+  return (
+    <div className="panel">
+      <ol className="journey">
+        {j.steps.map((st, i) => {
+          const share = top ? st.value / top : 0
+          return (
+            <li key={st.label} className={i >= j.steps.length - 2 ? 'late' : ''}>
+              <div className="j-bar" style={{ width: `${Math.max(28, 100 - i * 12)}%` }}>
+                <span className="j-label">{st.label}</span>
+                <strong>{n(st.value)}</strong>
+                <span className="j-note">{i === 0 ? st.note ?? '' : [`${(share * 100).toFixed(1)}% of all leads`, st.note].filter(Boolean).join(' · ')}</span>
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+      <p className="fine" style={{ marginTop: 12 }}>{j.basis}{j.notes?.length ? ' ' + j.notes.join(' ') : ''}</p>
+    </div>
+  )
+}
+
 export function PartialNotice({ month }: { month: ReportMonth }) {
   const end = monthEnd(month.id)
   if (DATA.dataCutoff >= end) return null

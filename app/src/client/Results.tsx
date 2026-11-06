@@ -9,7 +9,7 @@ import { Creative } from '../components/Creative'
 import { VerdictChip } from '../components/Badges'
 import { StatTile } from '../components/Charts'
 import { FourUp } from '../components/PostNumbers'
-import { FunnelStrip, MonthContext, PaidBlock, PartialNotice, WebBlock } from './Funnel'
+import { FunnelStrip, JourneyBlock, MonthContext, PaidBlock, PartialNotice, WebBlock } from './Funnel'
 
 function Feature({ c, open, compact }: { c: Content; open: (s: Selection) => void; compact?: boolean }) {
   return (
@@ -76,6 +76,13 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
         <div className="s-head"><h2 className="s-title">From reach to admissions</h2><span className="s-note">What social media, ads and the school portal fed into Project 800</span></div>
         <FunnelStrip month={month} />
       </section>
+
+      {month.leads?.journey && (
+        <section className="section">
+          <div className="s-head"><h2 className="s-title">{month.leads.journey.title}</h2><span className="s-note">All channels · admissions tracker</span></div>
+          <JourneyBlock month={month} />
+        </section>
+      )}
 
       <section className="section">
       <div className="s-head"><h2 className="s-title">How the posts did</h2><span className="s-note">Organic only · vs {prev ? prev.label : 'last month'}</span></div>

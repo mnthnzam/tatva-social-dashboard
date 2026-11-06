@@ -65,12 +65,15 @@ export interface PaidCampaign {
   status?: string; impressions?: number | null; clicks?: number | null
 }
 export interface WebChannel { name: string; sessions: number; engaged: number; avgTime?: number | null }
+export interface JourneyStep { label: string; value: number; note: string | null }
+export interface LeadJourney { title: string; basis: string; steps: JourneyStep[]; notes?: string[] }
 export interface MonthLeads {
   tracked: boolean; trackingNote?: string
   funnel: Partial<Record<FunnelKey, FunnelStage>>
   paid: { spend: number | null; spendBy?: Record<string, number>; campaigns: PaidCampaign[] }
   web?: { basis: string; excluded: number; channels: WebChannel[]; keyEvents: number | null } | null
   brief?: Brief | null
+  journey?: LeadJourney | null
   context: { date: string | null; text: string; kind?: 'event' | 'holiday' | 'issue' }[]
 }
 export interface InputItem { id: string; label: string; owner: string; status: 'waiting' | 'received' | 'partial' | 'not available'; feeds: string; note?: string }
