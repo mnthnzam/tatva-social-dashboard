@@ -66,7 +66,7 @@ export interface PaidCampaign {
 }
 export interface WebChannel { name: string; sessions: number; engaged: number; avgTime?: number | null }
 export interface JourneyStep { label: string; value: number; note: string | null }
-export interface LeadJourney { title: string; basis: string; steps: JourneyStep[]; notes?: string[] }
+export interface LeadJourney { title: string; basis: string; callout?: string | null; steps: JourneyStep[]; notes?: string[] }
 export interface MonthLeads {
   tracked: boolean; trackingNote?: string
   funnel: Partial<Record<FunnelKey, FunnelStage>>

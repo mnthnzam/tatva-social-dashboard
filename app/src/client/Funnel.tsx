@@ -168,6 +168,7 @@ export function JourneyBlock({ month }: { month: ReportMonth }) {
   const top = j.steps[0].value
   return (
     <div className="panel">
+      {j.callout && <p className="partial j-callout">{j.callout}</p>}
       <ol className="journey">
         {j.steps.map((st, i) => {
           const share = top ? st.value / top : 0

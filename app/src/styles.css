@@ -711,3 +711,17 @@ textarea, input, select { font: inherit; color: var(--ink); }
 .journey li.late .j-bar { background: var(--good-soft, var(--sunken)); }
 .journey li.late .j-bar strong { color: var(--good, var(--org)); }
 @media (max-width: 860px) { .j-bar { width: 100% !important; } }
+
+/* Clickable Insights: KPI tiles, money rows and cards jump to the detail behind them */
+.j-callout { margin: 0 0 16px; width: auto; border-radius: 10px; padding: 10px 14px; line-height: 1.5; }
+[id^="sec-"] { scroll-margin-top: 84px; }
+button.ins-kpi, button.money-row, button.ins-card { font: inherit; color: inherit; text-align: left; width: 100%; cursor: pointer; }
+.ins-kpi.link { align-items: flex-start; text-align: left; transition: transform .15s, box-shadow .15s; }
+.ins-kpi.link:hover { transform: translateY(-1px); }
+.ins-kpi.link:hover, .money-row.link:hover { box-shadow: var(--shadow); }
+.ins-kpi .k-go, .ic-go { margin-top: auto; padding-top: 6px; display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 600; color: var(--org); }
+.ins-kpi.accent .k-go { color: #fff; }
+.money-row.link { background: none; border: 0; }
+.money-row.link + .money-row.link { border-top: 1px solid var(--line); }
+.money-row.link:hover { background: var(--sunken); }
+.money-row.link:hover .mr-t { text-decoration: underline; text-underline-offset: 3px; }

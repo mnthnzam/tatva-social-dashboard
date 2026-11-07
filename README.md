@@ -23,6 +23,8 @@ npm run dev        # http://localhost:5173
 - **Results** (`#/results/<month>`) — the lead funnel first (people reached → conversations → enquiries → campus visits → admissions, by source, with untagged leads counted openly), the lead-to-admission journey from the school's admissions tracker (`journey` in `leads.json`, all channels), then four plain numbers vs last month (people reached, reactions & comments, shares & saves, new followers), what worked, what was quieter, plan delivery, who posted (Zamstars / Tatva team / unconfirmed), paid kept apart from organic, what else happened, and every post with a one-line verdict. A notice shows when the export stopped before the month ended.
 - **Big moves, explained** (Home) — every account change of 30% or more gets a reason line (`why` on the metric in `pipeline/raw/account.json`); until one is entered it says the reason is being checked.
 
+**Insights links** — every KPI tile, money row and card opens the detail behind it. Card `ref` in `leads.json` brief: `c:<content id>` opens a post, `s:<page>#<section>` jumps to a page section (`funnel`, `journey`, `posts`, `paid`, `web` on Results).
+
 Old links `#/review` and `#/account` still work (they open the plan and home).
 
 **Click to compare** — every headline number opens a breakdown: month by month, vs any other month (total, per post, by format, planned vs outside plan) and the posts that drove it. Every post can be compared with the typical post of its format, the month's average, or any other post.

@@ -57,10 +57,25 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
   }).sort((a, b) => VERDICT_ORDER[a.verdict] - VERDICT_ORDER[b.verdict] || b.spend - a.spend)
   const moneyTotal = money.reduce((a, g) => a + g.spend, 0)
 
+  // Refs: 'c:<content id>' / 'p:<plan id>' open the drawer; 's:<page>#<section>' goes to a page and scrolls to sec-<section>.
   const refOpen = (ref: string | null) => {
     if (!ref) return
-    const [k, id] = ref.split(':')
-    open({ kind: k as 'c' | 'p', id })
+    const kind = ref.slice(0, 1), id = ref.slice(2)
+    if (kind === 's') {
+      const [page, section] = id.split('#')
+      go(page)
+      if (section) {
+        let tries = 0
+        const seek = () => {
+          const el = document.getElementById(`sec-${section}`)
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          else if (tries++ < 40) setTimeout(seek, 50)
+        }
+        setTimeout(seek, 50)
+      }
+      return
+    }
+    open({ kind: kind as 'c' | 'p', id })
   }
   const refPost = (ref: string | null): Content | undefined => (ref?.startsWith('c:') ? contentById.get(ref.slice(2)) : undefined)
 
@@ -72,13 +87,13 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
       </header>
 
       <div className="ins-kpis">
-        <Kpi label="Spent on ads" value={spend !== null ? inr(spend) : '—'} sub={L?.paid.spendBy ? Object.entries(L.paid.spendBy).map(([k, v]) => `${k} ${inr(v)}`).join(' · ') : 'Paid data starts in October'} />
-        <Kpi label="Admission leads" value={enquiries !== null ? n(enquiries) : '—'} sub={enquiries ? leadSplit : 'Lead tracking starts in October'} accent />
-        <Kpi label="People reached" value={n(s.plain.reached)}
+        <Kpi onOpen={() => refOpen('s:results#paid')} label="Spent on ads" value={spend !== null ? inr(spend) : '—'} sub={L?.paid.spendBy ? Object.entries(L.paid.spendBy).map(([k, v]) => `${k} ${inr(v)}`).join(' · ') : 'Paid data starts in October'} />
+        <Kpi onOpen={() => refOpen('s:results#funnel')} label="Admission leads" value={enquiries !== null ? n(enquiries) : '—'} sub={enquiries ? leadSplit : 'Lead tracking starts in October'} accent />
+        <Kpi onOpen={() => refOpen('s:results#posts')} label="People reached" value={n(s.plain.reached)}
           sub={steadyPerPost ? `About ${(perPost / 1000).toFixed(1)}K per post, in line with ${prev!.label}` : reachDelta !== null ? `${reachDelta >= 0 ? '↑' : '↓'} ${pct(Math.abs(reachDelta))} on ${prev!.label}` : 'Organic reach across posts'}
           tone={steadyPerPost ? undefined : reachDelta !== null ? (reachDelta >= 0 ? 'up' : 'down') : undefined} />
-        <Kpi label="Posts that went out" value={String(s.posts)} sub={`On Instagram and Facebook${added ? `, incl. ${added} added during the month` : ''}`} />
-        {web !== null && <Kpi label="Website visits" value={n(web)} sub="All channels, Google Analytics" />}
+        <Kpi onOpen={() => refOpen('s:posts')} label="Posts that went out" value={String(s.posts)} sub={`On Instagram and Facebook${added ? `, incl. ${added} added during the month` : ''}`} />
+        {web !== null && <Kpi onOpen={() => refOpen('s:results#web')} label="Website visits" value={n(web)} sub="All channels, Google Analytics" />}
       </div>
 
       {money.length > 0 && (
@@ -89,7 +104,7 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
           </div>
           <div className="money-rows">
             {money.map((g) => (
-              <div key={g.label} className="money-row">
+              <button key={g.label} className="money-row link" onClick={() => refOpen('s:results#paid')}>
                 <div className="mr-main">
                   <span className={`mr-dot mb-${VERDICT[g.verdict].cls}`} />
                   <div>
@@ -101,7 +116,7 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
                   <span><b>{inr(g.spend)}</b>{pct(g.spend / moneyTotal)} of spend</span>
                   <span><b>{g.outcome}</b>{g.per && g.results ? `₹${Math.round(g.spend / g.results)} per ${g.per}` : ''}</span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -141,13 +156,15 @@ export function Insights({ month, open, go }: { month: ReportMonth; open: (s: Se
   )
 }
 
-function Kpi({ label, value, sub, accent, tone }: { label: string; value: string; sub: string; accent?: boolean; tone?: 'up' | 'down' }) {
+function Kpi({ label, value, sub, accent, tone, onOpen }: { label: string; value: string; sub: string; accent?: boolean; tone?: 'up' | 'down'; onOpen?: () => void }) {
+  const Tag = onOpen ? 'button' : 'div'
   return (
-    <div className={`ins-kpi${accent ? ' accent' : ''}`}>
+    <Tag className={`ins-kpi${accent ? ' accent' : ''}${onOpen ? ' link' : ''}`} onClick={onOpen}>
       <span className="k-l">{label}</span>
       <strong className="k-v">{value}</strong>
       <span className={`k-s${tone ? ` ${tone}` : ''}`}>{sub}</span>
-    </div>
+      {onOpen && <span className="k-go">See details <Icon name="arrow" size={13} /></span>}
+    </Tag>
   )
 }
 
@@ -160,6 +177,7 @@ function Card({ item, tone, post, onOpen }: { item: BriefItem; tone: 'good' | 'b
         <span className={`ic-stat ${tone}`}>{item.stat}</span>
         <h3>{item.title}</h3>
         <p>{item.body}</p>
+        {item.ref && <span className="ic-go">{item.ref.startsWith('s:') ? 'See details' : 'Open post'} <Icon name="arrow" size={13} /></span>}
       </div>
     </Tag>
   )

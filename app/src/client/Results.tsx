@@ -72,19 +72,19 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
         <PartialNotice month={month} />
       </header>
 
-      <section className="section" style={{ marginTop: 32 }}>
+      <section className="section" id="sec-funnel" style={{ marginTop: 32 }}>
         <div className="s-head"><h2 className="s-title">From reach to admissions</h2><span className="s-note">What social media, ads and the school portal fed into Project 800</span></div>
         <FunnelStrip month={month} />
       </section>
 
       {month.leads?.journey && (
-        <section className="section">
-          <div className="s-head"><h2 className="s-title">{month.leads.journey.title}</h2><span className="s-note">All channels · admissions tracker</span></div>
+        <section className="section" id="sec-journey">
+          <div className="s-head"><h2 className="s-title">{month.leads.journey.title}</h2><span className="s-note">All channels · MCB admissions application</span></div>
           <JourneyBlock month={month} />
         </section>
       )}
 
-      <section className="section">
+      <section className="section" id="sec-posts">
       <div className="s-head"><h2 className="s-title">How the posts did</h2><span className="s-note">Organic only · vs {prev ? prev.label : 'last month'}</span></div>
       <div className="tiles">
         <StatTile label="People reached" value={n(s.plain.reached)} cur={s.plain.reached} prev={prev?.summary.plain.reached} prevLabel={prev?.label} spark={spark('reached')} onClick={() => open({ kind: 'm', id: `reached|${month.id}` })}
@@ -116,13 +116,13 @@ export function Results({ month, open }: { month: ReportMonth; open: (s: Selecti
         </div>
       </section>
 
-      <section className="section">
+      <section className="section" id="sec-paid">
         <div className="s-head"><h2 className="s-title">Paid</h2><span className="s-note">Kept apart from the organic numbers above</span></div>
         <PaidBlock month={month} />
       </section>
 
       {month.leads?.web && (
-        <section className="section">
+        <section className="section" id="sec-web">
           <div className="s-head"><h2 className="s-title">Website visits</h2><span className="s-note">Google Analytics · 1–31 {month.label.slice(0, 3)}</span></div>
           <WebBlock month={month} />
         </section>

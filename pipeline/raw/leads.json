@@ -333,13 +333,13 @@
             "title": "The main lead reel",
             "stat": "₹64 per lead",
             "body": "One reel brought 396 of October's 468 Meta leads. It's the cheapest way we have to reach a new parent.",
-            "ref": null
+            "ref": "s:results#paid"
           },
           {
             "title": "Instagram is growing",
             "stat": "+433 followers",
             "body": "Instagram account follows rose 60% on September, helped by the ads.",
-            "ref": null
+            "ref": "s:accounts"
           },
           {
             "title": "Campus moments travel furthest",
@@ -357,39 +357,39 @@
             "title": "Parents passed posts on",
             "stat": "584 shares & saves",
             "body": "Up 5% on September with fewer posts, so each post was shared or saved more often.",
-            "ref": null
+            "ref": "s:results#posts"
           }
         ],
         "notWorking": [
           {
-            "title": "Warm leads to campus visits",
+            "title": "Turning warm leads into campus visits",
             "stat": "756 warm leads",
-            "body": "756 October leads are Interested or waiting on a call back. A campus-visit drive starts with the 44 warm leads who missed a booked visit and the 240 call-backs older than 14 days.",
-            "ref": null
+            "body": "756 families in MCB are interested or have asked for a call back, October's biggest opportunity. A focused campus-visit drive starts with the 44 families who booked a visit but haven't come in yet, and the 240 call-backs waiting more than two weeks.",
+            "ref": "s:results#journey"
           },
           {
             "title": "Faster replies to parents",
             "stat": "Quick win",
             "body": "About 1 in 10 Instagram messages got a reply in October, after 1 hour 47 minutes on average. Replying within the hour turns more of these conversations into admission leads.",
-            "ref": null
+            "ref": "s:results#funnel"
           },
           {
             "title": "Budget back to the best ad",
             "stat": "₹64 a lead",
             "body": "A two-day test of grade-specific ads (Grades 3–5, Nursery–PP2) brought 44 leads. The main lead reel stays far cheaper, so November's budget goes there.",
-            "ref": null
+            "ref": "s:results#paid"
           },
           {
             "title": "Reach per post held steady",
             "stat": "14 posts vs 18",
-            "body": "Unpaid reach was 36.8K. Fewer posts went out than in September, but each post reached about as many people (2.6K vs 2.7K).",
-            "ref": null
+            "body": "Reach was 36.8K. Fewer posts went out than in September, but each post reached about as many people (2.6K vs 2.7K).",
+            "ref": "s:results#posts"
           },
           {
             "title": "Cleaner Google traffic",
             "stat": "Job-seeker filter",
             "body": "110 cancelled leads were job-seekers. Job-related negative keywords (jobs, vacancy, teacher, careers) keep ad spend on parents.",
-            "ref": null
+            "ref": "s:results#paid"
           }
         ],
         "decisions": [
@@ -416,13 +416,13 @@
         ]
       },
       "journey": {
-        "title": "Lead-to-admission journey",
-        "basis": "All channels combined, from the school's October admissions tracker. The tracker counts every lead logged in October, so its total differs from the Meta, Google Ads and school portal figures above.",
+        "title": "Lead-to-admission journey (MCB)",
+        "basis": "Source: MCB admissions application, October 2026, all channels combined.",
         "steps": [
           {
-            "label": "Leads recorded",
+            "label": "Leads in MCB",
             "value": 1321,
-            "note": "All October leads"
+            "note": "All October leads recorded in MCB"
           },
           {
             "label": "Not cancelled",
@@ -451,8 +451,9 @@
           }
         ],
         "notes": [
-          "Walk-ins are counted through 5 Nov; 12 of the 27 happened in early November."
-        ]
+          "Walk-ins are counted up to 5 Nov; 12 of the 27 happened in early November, so October's own walk-ins were 15."
+        ],
+        "callout": "This funnel comes from the MCB admissions application, which currently shows data discrepancies: it records 1,321 October leads, against 1,158 reported by Meta, Google Ads and the school portal. The records are being corrected, and these figures will be updated once fixed."
       }
     }
   },
